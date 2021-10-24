@@ -1,0 +1,23 @@
+{
+  "name": "todolist_top",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexsrebernic/TodoList_TOP.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexsrebernic/TodoList_TOP/issues"
+  },
+  "homepage": "https://github.com/alexsrebernic/TodoList_TOP#readme",
+  "devDependencies": {
+    "webpack": "^5.59.1",
+    "webpack-cli": "^4.9.1"
+  }
+}
