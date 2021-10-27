@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
 nav {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -20,7 +21,7 @@ nav {
 nav li {
   list-style: none;
   font-size: 19px;
-  width: 80%;
+  width: 70%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -101,6 +102,191 @@ nav .settings {
   height: 20%;
 }
 
+.content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  background-color: rgba(250, 252, 252, 0.4);
+}
+
+.content .header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 95%;
+  height: 20%;
+}
+
+.content .header ul {
+  margin: 10px;
+  cursor: pointer;
+}
+
+.content .title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 10%;
+}
+
+.content .title #projects {
+  font-size: 18px;
+  width: 15%;
+  font-weight: 300;
+  margin-right: auto;
+  margin-left: 15px;
+}
+
+.content .title select {
+  width: 10%;
+  margin-right: 20px;
+  background-color: rgba(174, 214, 241, 0.1);
+  border-radius: 10px;
+  padding: 6px;
+  border: none;
+}
+
+.content .dashboard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 100%;
+  height: 100%;
+}
+
+.content .dashboard .card {
+  background-color: rgba(174, 214, 241, 0.03);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 30%;
+  height: 90%;
+  border-radius: 15px;
+}
+
+.content .dashboard .card .top {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+
+.content .dashboard .card .top h2 {
+  font-weight: 400;
+  margin: 15px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.content .dashboard .card .top .quantity {
+  width: 10%;
+  border-radius: 7px;
+  background-color: rgba(174, 214, 241, 0.1);
+  text-align: center;
+}
+
+.content .dashboard .card button {
+  width: 80%;
+  font-size: 24px;
+  font-weight: 300;
+  height: 30px;
+  background-color: rgba(174, 214, 241, 0.1);
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.content .dashboard .work {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.content .dashboard .work .task {
+  width: 90%;
+  background-color: white;
+  border-radius: 15px;
+  font-size: 15px;
+  font-weight: 300;
+  border: 1px solid #fafcfc;
+  margin: 10px;
+  box-shadow: -1px 0px 22px -27px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: -1px 0px 22px -27px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 0px 22px -27px rgba(0, 0, 0, 0.75);
+}
+
+.content .dashboard .work .task .titletask {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 10px;
+}
+
+.content .dashboard .work .task .titletask h2 {
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.content .dashboard .work .task .titletask svg {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.content .dashboard .work .task p {
+  margin: 10px;
+  width: 90%;
+}
+
+.content .dashboard .work .task #date {
+  margin: 15px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -170,7 +356,7 @@ body footer svg:hover {
   background-color: white;
   width: 65%;
   height: 80vh;
-  border-radius: 5px;
+  border-radius: 15px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
