@@ -1,5 +1,4 @@
-import displayHome from "./home"
-
+import {displayHome,displayCalendar} from "./display"
 
 
 
@@ -9,19 +8,20 @@ const CALENDAR_BUTTON = document.getElementById("calendar")
 const SETTINGS_BUTTON = document.getElementById("settings")
 const LOG_IN_BUTTON = document.getElementById("login")
 const content = document.querySelector(".content") 
-
+const calendar = document.querySelector(".auto-jsCalendar")
+const home = document.querySelector(".home")
 let firstTime = localStorage.getItem("first_time")
-if(!firstTime) {
-    localStorage.setItem("first_time","1")
-    localStorage.setItem("lastPage", content.innerHTML)
+calendar.style.display = "none"
 
-} else if(firstTime){
-    let page = localStorage.getItem("lastPage")
-}
-HOME_BUTTON.onclick = () => displayHome()
+HOME_BUTTON.onclick = () => displayHomeButton()
 ADD_PROJECT_BUTTON.onclick = () => AddProject()
-CALENDAR_BUTTON.onclick = () => displayCalendar()
+CALENDAR_BUTTON.onclick = () => displayCalendarButton()
 
-function displayCalendar(){
-    localStorage.setItem("lastPage", content.innerHTML)
+function displayCalendarButton(){
+    home.style.display = "none"
+    calendar.style.display = "flex"
+}
+function displayHomeButton(){
+   calendar.style.display = "none"
+   home.style.display = "block"
 }
