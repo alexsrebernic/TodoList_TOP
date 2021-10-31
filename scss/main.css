@@ -36,10 +36,6 @@ nav li {
   transition: 0.3s ease;
 }
 
-nav li svg {
-  width: 25px;
-}
-
 nav li span {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -47,6 +43,10 @@ nav li span {
   width: 80%;
   margin-left: 10px;
   font-weight: 400;
+}
+
+nav li svg {
+  width: 25px;
 }
 
 nav li:hover {
@@ -68,7 +68,6 @@ nav .titlenav {
   height: 20%;
   text-align: center;
   font-weight: 900;
-  margin-top: 10px;
 }
 
 nav .titlenav h1 {
@@ -85,7 +84,7 @@ nav .list {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 80%;
-  height: 60%;
+  height: 50%;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
@@ -100,7 +99,17 @@ nav .list li {
 
 nav .settings {
   width: 80%;
-  height: 20%;
+  height: 25%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 #form-input-project {
@@ -138,6 +147,117 @@ nav .settings {
   cursor: pointer;
 }
 
+#settings-options {
+  display: none;
+  height: 100%;
+}
+
+#night-mode {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+  height: 50%;
+}
+
+#night-mode span {
+  margin-left: 4px;
+  font-family: "Roboto", sans-serif;
+}
+
+#night-mode svg {
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+#night-mode:hover {
+  cursor: pointer;
+  color: gray;
+}
+
+#lag-en {
+  height: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+#lag-en span {
+  font-family: "Roboto", sans-serif;
+  margin-left: 4px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  -webkit-box-shadow: 0 0 1px #2196F3;
+          box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(15px);
+  transform: translateX(15px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 .content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -157,7 +277,8 @@ nav .settings {
 }
 
 .content #homePage {
-  height: 1000%;
+  display: block;
+  height: 100%;
 }
 
 .content .header {
@@ -1033,6 +1154,37 @@ body footer svg:hover {
           animation: up 1s forwards;
 }
 
+@-webkit-keyframes up1 {
+  0% {
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes up1 {
+  0% {
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.up1 {
+  -webkit-animation: up1 1s forwards;
+          animation: up1 1s forwards;
+}
+
 @-webkit-keyframes down1 {
   0% {
     -webkit-transform: translateY(-100px);
@@ -1062,6 +1214,37 @@ body footer svg:hover {
 .down1 {
   -webkit-animation: down1 1s forwards;
           animation: down1 1s forwards;
+}
+
+@-webkit-keyframes down2 {
+  0% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+    opacity: 0;
+  }
+}
+
+@keyframes down2 {
+  0% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+    opacity: 0;
+  }
+}
+
+.down2 {
+  -webkit-animation: down2 1s forwards;
+          animation: down2 1s forwards;
 }
 
 @-webkit-keyframes slideLeft {

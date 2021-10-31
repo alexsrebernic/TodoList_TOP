@@ -1,4 +1,4 @@
-export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton}
+export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration}
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -9,8 +9,11 @@ const content = document.querySelector(".content")
 const calendar = document.querySelector("#calendarPage")
 const home = document.querySelector("#homePage")
 const svgPlus = document.getElementById("plus")
-const listLi = document.querySelector(".list")
+
+
 const formInputProject = document.getElementById("form-input-project")
+const settingOptions = document.getElementById("settings-options")
+const svgConfg = document.getElementById("svg-config")
 
 function slideHomeToCalendar(){
     home.setAttribute("class","slideLeft")
@@ -21,37 +24,36 @@ function slideHomeToCalendar(){
         
     }, 500);
 }
+
+home.style.display = "block"
 function slideCalendarToHome(){
-    calendar.removeAttribute("class")
-    home.removeAttribute("class")
-    home.setAttribute("class","slideLeft2")
-    calendar.setAttribute("class","slideLeft")
-    setTimeout(() => {
-        calendar.style.display = "none"
-        home.style.display = "block"
-    }, 500);
+    if(home.style.display != "block"){  
+        calendar.removeAttribute("class")
+        home.removeAttribute("class")
+        home.setAttribute("class","slideLeft2")
+        calendar.setAttribute("class","slideLeft")
+        setTimeout(() => {
+            calendar.style.display = "none"
+            home.style.display = "block"
+        }, 500);
+    }  
 }
-let isOpen
 
 function openAddProjectButton(){
     if(svgPlus.getAttribute("class") === "rotate"){
-        console.log("activado2")
         svgPlus.removeAttribute("class")
         svgPlus.setAttribute("class","return")
-        isOpen = false
         formInputProject.removeAttribute("class")
         formInputProject.setAttribute("class","up")
-        calendar.removeAttribute("class")
+        CALENDAR_BUTTON.removeAttribute("class")
         setTimeout(() => {
         formInputProject.style.display = "none"    
         }, 1000);
         return
     } 
     if(svgPlus.getAttribute("class") === "return"){
-        console.log("activado1")
         svgPlus.removeAttribute("class")
         svgPlus.setAttribute("class","rotate")
-        isOpen = true
         formInputProject.style.display = "flex"
         formInputProject.removeAttribute("class")
         formInputProject.setAttribute("class","down")
@@ -62,7 +64,6 @@ function openAddProjectButton(){
     if(svgPlus.getAttribute("class") == undefined){
         svgPlus.removeAttribute("class")
         svgPlus.setAttribute("class","rotate")
-        isOpen = true
         formInputProject.style.display = "flex"
         formInputProject.removeAttribute("class")
         formInputProject.setAttribute("class","down")
@@ -70,4 +71,20 @@ function openAddProjectButton(){
         CALENDAR_BUTTON.setAttribute("class","down1")
         return
     }
+}
+function openConfiguration(){
+    svgConfg.removeAttribute("class")
+    if(settingOptions.style.display === "flex"){
+        settingOptions.removeAttribute("class")
+        settingOptions.setAttribute("class", "down2")
+
+        svgConfg.setAttribute("class","rotate")
+        setTimeout(() => {
+        settingOptions.style.display = "none"
+        }, 1000);
+        return
+    }
+    settingOptions.style.display = "flex"
+    settingOptions.setAttribute("class", "up1")
+    svgConfg.setAttribute("class","rotate")
 }

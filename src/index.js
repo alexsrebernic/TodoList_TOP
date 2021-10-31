@@ -1,4 +1,4 @@
-import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton } from "./animations"
+import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration } from "./animations"
 
 
 const HOME_BUTTON = document.getElementById("home")
@@ -14,13 +14,11 @@ const svgPlus = document.getElementById("plus")
 const listLi = document.querySelector(".list")
 const formInputProject = document.getElementById("form-input-project")
 
-let firstTime = localStorage.getItem("first_time")
-calendar.style.display = "none"
 
 HOME_BUTTON.onclick = () => displayHomeButton()
 ADD_PROJECT_BUTTON.onclick = () => addProjectButton()
 CALENDAR_BUTTON.onclick = () => displayCalendarButton()
-
+SETTINGS_BUTTON.onclick = () => openConfiguration()
 function displayCalendarButton(){
    slideHomeToCalendar()
 }
@@ -32,5 +30,4 @@ function displayHomeButton(){
 function addProjectButton(){  
    openAddProjectButton()
     
-
 }
