@@ -7,6 +7,7 @@ nav {
     justify-content: center;
     align-items: center;
     width: 20%;
+    z-index: 10;
     li {
         list-style: none;
         font-size: 19px;
@@ -62,5 +63,29 @@ nav {
     .settings {
         width: 80%;
         height: 20%;
+    }
+}
+#form-input-project {
+    font-family: $fontfamily;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 15px;
+    height: 25%;
+    margin-bottom: 25px;
+    label {
+        margin: 5px;
+    }
+    input {
+        margin: 5px;
+    }
+    #submit-name-project{
+        background-color: #aed6f1 ;
+        color: white;
+        border: none;
+        padding: 5px;
+        border-radius: 4px;
+        cursor: pointer;
     }
 }

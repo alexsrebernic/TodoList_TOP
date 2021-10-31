@@ -7,8 +7,8 @@ $fontfamily: 'Roboto', sans-serif;
     align-items: center;
     font-family: $fontfamily;
     background-color: rgba($color:  #fafcfc , $alpha: 0.4);
-    .home {
-        height: 100%;
+    #homePage {
+        height: 1000%;
     }
     .header {
         display: flex;
