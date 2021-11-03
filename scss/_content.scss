@@ -7,9 +7,16 @@ $fontfamily: 'Roboto', sans-serif;
     align-items: center;
     font-family: $fontfamily;
     background-color: rgba($color:  #fafcfc , $alpha: 0.4);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    transition: 0.3s ease;
     #homePage {
         display: block;
         height: 100%;
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+        transition: 0.3s ease;
+
     }
     .header {
         display: flex;
@@ -48,7 +55,7 @@ $fontfamily: 'Roboto', sans-serif;
         display: flex;
         justify-content: space-around;
         width: 100%;
-        height: 100%;
+        height: 91%;
         .card {
             background-color: rgba($color:   #aed6f1  , $alpha: 0.03);
             display: flex;
@@ -88,7 +95,7 @@ $fontfamily: 'Roboto', sans-serif;
         }
         .work {
             width: 100%;
-            height: 90%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;

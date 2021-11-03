@@ -14,6 +14,7 @@ const svgPlus = document.getElementById("plus")
 const formInputProject = document.getElementById("form-input-project")
 const settingOptions = document.getElementById("settings-options")
 const svgConfg = document.getElementById("svg-config")
+const nightModeButton = document.getElementById("night-mode")
 
 function slideHomeToCalendar(){
     home.setAttribute("class","slideLeft")
@@ -51,17 +52,8 @@ function openAddProjectButton(){
         }, 1000);
         return
     } 
-    if(svgPlus.getAttribute("class") === "return"){
-        svgPlus.removeAttribute("class")
-        svgPlus.setAttribute("class","rotate")
-        formInputProject.style.display = "flex"
-        formInputProject.removeAttribute("class")
-        formInputProject.setAttribute("class","down")
-        CALENDAR_BUTTON.removeAttribute("class")
-        CALENDAR_BUTTON.setAttribute("class","down1")
-        return
-    }    
-    if(svgPlus.getAttribute("class") == undefined){
+  
+    if(svgPlus.getAttribute("class") == undefined || svgPlus.getAttribute("class") === "return"){
         svgPlus.removeAttribute("class")
         svgPlus.setAttribute("class","rotate")
         formInputProject.style.display = "flex"
@@ -72,19 +64,23 @@ function openAddProjectButton(){
         return
     }
 }
+settingOptions.style.display = "none"
 function openConfiguration(){
     svgConfg.removeAttribute("class")
+
     if(settingOptions.style.display === "flex"){
         settingOptions.removeAttribute("class")
         settingOptions.setAttribute("class", "down2")
-
         svgConfg.setAttribute("class","rotate")
         setTimeout(() => {
         settingOptions.style.display = "none"
         }, 1000);
         return
+    } else if(settingOptions.style.display === "none"){
+        settingOptions.style.display = "flex"
+        settingOptions.setAttribute("class", "up1")
+        svgConfg.setAttribute("class","return")
+        return
     }
-    settingOptions.style.display = "flex"
-    settingOptions.setAttribute("class", "up1")
-    svgConfg.setAttribute("class","rotate")
+    
 }

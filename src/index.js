@@ -1,5 +1,5 @@
 import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration } from "./animations"
-
+import turnNightThemeOrWhiteTheme from "./themeSwitch"
 
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
@@ -13,12 +13,14 @@ const home = document.querySelector("#homePage")
 const svgPlus = document.getElementById("plus")
 const listLi = document.querySelector(".list")
 const formInputProject = document.getElementById("form-input-project")
+const nightModeButton = document.getElementById("night-mode")
 
 
 HOME_BUTTON.onclick = () => displayHomeButton()
 ADD_PROJECT_BUTTON.onclick = () => addProjectButton()
 CALENDAR_BUTTON.onclick = () => displayCalendarButton()
 SETTINGS_BUTTON.onclick = () => openConfiguration()
+nightModeButton.onclick = () => turnNightThemeOrWhiteTheme()
 function displayCalendarButton(){
    slideHomeToCalendar()
 }
