@@ -1,4 +1,4 @@
-export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration}
+export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration,displayPopUpHelp}
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -82,5 +82,8 @@ function openConfiguration(){
         svgConfg.setAttribute("class","return")
         return
     }
+    
+}
+function displayPopUpHelp(){
     
 }

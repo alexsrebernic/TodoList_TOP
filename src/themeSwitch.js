@@ -1,4 +1,5 @@
 export default function turnNightThemeOrWhiteTheme(){
+    const NIGHT_MODE_SWITCH = document.getElementById("checkBoxTheme")
     const html = document.querySelector("html")
     const body = document.querySelector("body")
     const container = document.getElementById("container")
@@ -26,12 +27,8 @@ export default function turnNightThemeOrWhiteTheme(){
     let backgroundColorCardsBlack = "#404040"
     let selectAndAddProjectBottonBlack = "rgba(0, 0, 0, 0.1)"
 
-    if(body.style.backgroundColor != backgroundColorBlack){
-        isBlackMode = true
-    } else if (body.style.backgroundColor !== backgroundColorWhite){
-        isBlackMode = false
-    } 
-    if(isBlackMode){
+   
+    if(NIGHT_MODE_SWITCH.checked){
         
         html.style.backgroundColor = backgroundColorBlack
         body.style.backgroundColor = backgroundColorBlack;
@@ -69,7 +66,7 @@ export default function turnNightThemeOrWhiteTheme(){
             svgs.style.color = colorLettersBlackTheme
         } )
         submitNameProject.style.backgroundColor = selectAndAddProjectBottonBlack
-    }else if(isBlackMode === false){
+    }else if(NIGHT_MODE_SWITCH.checked == false){
         html.style.backgroundColor = backgroundColorWhite
         body.style.backgroundColor = backgroundColorWhite;
         container.style.backgroundColor = "white"

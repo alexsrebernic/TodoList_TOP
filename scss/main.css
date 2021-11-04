@@ -150,6 +150,7 @@ nav .settings {
 #settings-options {
   display: none;
   height: 100%;
+  width: 100%;
 }
 
 #night-mode {
@@ -162,6 +163,7 @@ nav .settings {
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
   height: 50%;
+  margin-top: 10px;
 }
 
 #night-mode span {
@@ -172,11 +174,6 @@ nav .settings {
 #night-mode svg {
   cursor: pointer;
   margin-left: 4px;
-}
-
-#night-mode:hover {
-  cursor: pointer;
-  color: gray;
 }
 
 #lag-en {

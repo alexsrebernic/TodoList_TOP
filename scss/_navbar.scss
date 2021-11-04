@@ -95,6 +95,7 @@ nav {
 #settings-options {
     display: none;
     height: 100%;
+    width: 100%;
 
 }
 #night-mode{
@@ -102,6 +103,7 @@ nav {
     align-items: center;
     transition: 0.3s ease;
     height: 50%;
+    margin-top: 10px;
     span {
         margin-left: 4px;
         font-family: $fontfamily;
@@ -111,10 +113,7 @@ nav {
         margin-left: 4px;
     }
 }
-#night-mode:hover {
-    cursor: pointer;
-    color: gray;
-}
+
 #lag-en {
     height: 50%;
 
