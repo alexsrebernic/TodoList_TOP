@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap');
 
 
-@import './navbar','./content','./jsCalendar.scss','./calendar';
+@import './navbar','./content','./jsCalendar.scss','./calendar','./logInPopUp';
 
 
 
@@ -22,7 +22,7 @@ body{
     align-items: center;
     height: 100vh;
     transition: 0.3s ease;
-
+    
     footer {
         align-self: center;
         justify-self: flex-end;
@@ -48,7 +48,7 @@ body{
 }
 
 .container {
-
+    z-index: 1;
     margin-top: 50px;
     background-color: white;
     width: 65%;

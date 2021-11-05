@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300;1,900&display=swap");
 nav {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -972,6 +973,168 @@ input:checked + .slider:before {
   margin: 5px;
 }
 
+#background-popup {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+  display: none;
+}
+
+#background-popup #popup-login {
+  z-index: 3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background: #fff;
+  width: 450px;
+  height: 500px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 20px -1px rgba(0, 0, 0, 0.57);
+  -webkit-box-shadow: 1px 1px 20px -1px rgba(0, 0, 0, 0.57);
+  -moz-box-shadow: 1px 1px 20px -1px rgba(0, 0, 0, 0.57);
+  font-family: "Roboto", sans-serif;
+}
+
+#background-popup #popup-login h2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 15%;
+  font-size: 30px;
+}
+
+#background-popup #popup-login h1 {
+  font-size: 25px;
+  text-align: center;
+}
+
+#background-popup #popup-login form {
+  width: 90%;
+  height: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+#background-popup #popup-login form #email-input, #background-popup #popup-login form #password-input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  width: 90%;
+  height: 25%;
+}
+
+#background-popup #popup-login form #email-input input, #background-popup #popup-login form #password-input input {
+  height: 65%;
+}
+
+#background-popup #popup-login form #buttons-input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  width: 100%;
+  height: 20%;
+}
+
+#background-popup #popup-login form #buttons-input input {
+  width: 40%;
+  height: 95%;
+}
+
+#background-popup #popup-login #fast-log-in-buttons {
+  width: 80%;
+  height: 25%;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#background-popup #popup-login #fast-log-in-buttons button {
+  width: 40%;
+  height: 40%;
+}
+
+@-webkit-keyframes displayPopUp {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes displayPopUp {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fromtop {
+  -webkit-animation: displayPopUp 1s linear forwards;
+          animation: displayPopUp 1s linear forwards;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -1039,6 +1202,7 @@ body footer svg:hover {
 }
 
 .container {
+  z-index: 1;
   margin-top: 50px;
   background-color: white;
   width: 65%;

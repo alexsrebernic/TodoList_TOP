@@ -8,10 +8,34 @@
     <link rel="stylesheet" href="/scss/main.css">
 </head>
 <body>
-    <div class="popupLogIn">
-      
+  <div id="background-popup">
+    <div id="popup-login">
+      <svg id="close-pop-up" style="width: 25px; margin-left:auto;cursor:pointer;color:black !important;" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+      <h2>.todolist</h2>
+      <h1>Hi, welcome back!</h1>
+      <form action="">
+        <div id="email-input">
+          <input id="email-input" type="text" placeholder="Email Address" required>
+        </div>
+        <div id="password-input">
+          <input id="password-input" type="text" placeholder="Password" required>
+        </div>
+        <div id="buttons-input">
+        <input type="button" value="Sign Up">
+        <input type="button" value="Sign In">
+      </div>
+      </form>
+
+      <span>-OR-</span>
+      <div id="fast-log-in-buttons">
+        <button id="googleUser">Google</button>
+        <button id="demoUser">Demo</button>
+      </div>
     </div>
-    <div class="container" id="container">
+  </div>
+    <div class="container" id="container" >
         <nav>
             <div class="titlenav">
             <h1>.todolist</h1>
@@ -79,9 +103,7 @@
             </div>
             </div>
             <div id="homePage">
-             <div class="header"><ul><svg id="question-mark" style="width: 25px;" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg></ul> <ul><svg style="width: 25px;" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <div class="header"> <ul><svg style="width: 25px;" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg></ul> </div> <div class="title"> <select name="projects" id="projects" > <option value="" hidden selected id="projectdefault">Project</option> </select> <select name="select"> <option value="thisweek" selected id="selectdefaultweek" >This week</option> <option value="day" id="dayoption" >Day</option> <option value="week" id="weekoption">Week</option> <option id="yearoption" value="year">Year</option> </select> </div> <div class="dashboard"><div class="card"> <div class="top"> <h2 id="todotext">To do</h2> <h2 class="quantity" id="todo_quantity">0</h2> </div> <button class="add_task" id="add_todo">+</button> <div class="work" id="to_dos"> <div class="task"> <div class="titletask"> <h2>Example</h2> <div> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />

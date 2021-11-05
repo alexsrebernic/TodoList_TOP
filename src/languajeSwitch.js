@@ -17,7 +17,6 @@ const labelinput = document.getElementById("labelinput")
 const inputproject = document.getElementById("input-project")
 const submitnameproject = document.getElementById("submit-name-project")
 if(LANGUAJE_SWITCH_BUTTON.checked){
-    console.log("asd")
     homespan.textContent = "Casa"
     addprojectspan.textContent = "Añadir proyecto"
     calendarspan.textContent = "Calendario"
