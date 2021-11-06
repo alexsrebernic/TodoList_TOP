@@ -1034,7 +1034,7 @@ input:checked + .slider:before {
 
 #background-popup #popup-login form {
   width: 90%;
-  height: 50%;
+  height: 45%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1050,7 +1050,7 @@ input:checked + .slider:before {
           align-items: flex-start;
 }
 
-#background-popup #popup-login form #email-input, #background-popup #popup-login form #password-input {
+#background-popup #popup-login form #email-div, #background-popup #popup-login form #password-div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1061,8 +1061,9 @@ input:checked + .slider:before {
   height: 25%;
 }
 
-#background-popup #popup-login form #email-input input, #background-popup #popup-login form #password-input input {
+#background-popup #popup-login form #email-div input, #background-popup #popup-login form #password-div input {
   height: 65%;
+  width: 90%;
 }
 
 #background-popup #popup-login form #buttons-input {
@@ -1083,9 +1084,15 @@ input:checked + .slider:before {
   height: 20%;
 }
 
-#background-popup #popup-login form #buttons-input input {
+#background-popup #popup-login form #buttons-input button {
   width: 40%;
   height: 95%;
+  background: none;
+  border: 1px solid black;
+  color: black;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 #background-popup #popup-login #fast-log-in-buttons {
@@ -1108,8 +1115,16 @@ input:checked + .slider:before {
 }
 
 #background-popup #popup-login #fast-log-in-buttons button {
+  border-radius: 5px;
+  cursor: pointer;
   width: 40%;
   height: 40%;
+}
+
+#state {
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+  color: red;
 }
 
 @-webkit-keyframes displayPopUp {
@@ -1133,6 +1148,29 @@ input:checked + .slider:before {
 .fromtop {
   -webkit-animation: displayPopUp 1s linear forwards;
           animation: displayPopUp 1s linear forwards;
+}
+
+@-webkit-keyframes desvanecerse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes desvanecerse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.desvanecerse {
+  -webkit-animation: desvanecerse 0.5s linear forwards;
+          animation: desvanecerse 0.5s linear forwards;
 }
 
 * {

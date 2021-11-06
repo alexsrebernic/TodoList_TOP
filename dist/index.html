@@ -15,22 +15,24 @@
       </svg>
       <h2>.todolist</h2>
       <h1>Hi, welcome back!</h1>
-      <form action="">
-        <div id="email-input">
-          <input id="email-input" type="text" placeholder="Email Address" required>
+      <span id="state"></span>
+      <form action="" id="formUser">
+        <div id="email-div">
+          <input id="email-input" name="email" type="email" placeholder="Email Address" required>
         </div>
-        <div id="password-input">
-          <input id="password-input" type="text" placeholder="Password" required>
+        <div id="password-div">
+          <input id="password-input" name="password" type="password" placeholder="Password" required>
         </div>
         <div id="buttons-input">
-        <input type="button" value="Sign Up">
-        <input type="button" value="Sign In">
+
+        <button type="submit" id="sign-up">Sign Up</button>
+        <button type="submit" id="sign-in">Sign In</button>
       </div>
       </form>
 
       <span>-OR-</span>
       <div id="fast-log-in-buttons">
-        <button id="googleUser">Google</button>
+        <button id="googleUser"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt=""> </button>
         <button id="demoUser">Demo</button>
       </div>
     </div>
@@ -103,9 +105,7 @@
             </div>
             </div>
             <div id="homePage">
-             <div class="header"> <ul><svg style="width: 25px;" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg></ul> </div> <div class="title"> <select name="projects" id="projects" > <option value="" hidden selected id="projectdefault">Project</option> </select> <select name="select"> <option value="thisweek" selected id="selectdefaultweek" >This week</option> <option value="day" id="dayoption" >Day</option> <option value="week" id="weekoption">Week</option> <option id="yearoption" value="year">Year</option> </select> </div> <div class="dashboard"><div class="card"> <div class="top"> <h2 id="todotext">To do</h2> <h2 class="quantity" id="todo_quantity">0</h2> </div> <button class="add_task" id="add_todo">+</button> <div class="work" id="to_dos"> <div class="task"> <div class="titletask"> <h2>Example</h2> <div> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <div class="header"><span  id="account-name"></span> </div> <div class="title"> <select name="projects" id="projects" > <option value="" hidden selected id="projectdefault">Project</option> </select> <select name="select"> <option value="thisweek" selected id="selectdefaultweek" >This week</option> <option value="day" id="dayoption" >Day</option> <option value="week" id="weekoption">Week</option> <option id="yearoption" value="year">Year</option> </select> </div> <div class="dashboard"><div class="card"> <div class="top"> <h2 id="todotext">To do</h2> <h2 class="quantity" id="todo_quantity">0</h2> </div> <button class="add_task" id="add_todo">+</button> <div class="work" id="to_dos"> <div class="task"> <div class="titletask"> <h2>Example</h2> <div> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
               </svg> </div> </div> <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti exercitationem delectus quis molestiae officiis illo veritatis aliquam odio, totam enim.</p> <sub id="date">27/10/2021</sub></div></div> </div> <div class="card"> <div class="top"> <h2 id="inprogresstext">In progress</h2> <h2 id="inprogress_quantity" class="quantity">0</h2> </div> <button class="add_task" id="add_inprogress">+</button> <div class="work" id="inprogress"></div> </div> <div class="card"> <div class="top"> <h2 id="completedtext">Completed</h2> <h2 id="complete_quantity" class="quantity">0</h2> </div> <button class="add_task" id="add_complete">+</button> <div class="work" id="completed"></div> </div> </div></div>
         </div>

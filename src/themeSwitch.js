@@ -19,6 +19,10 @@ export default function turnNightThemeOrWhiteTheme(){
     const svg = document.querySelectorAll("svg")
     const submitNameProject = document.getElementById("submit-name-project")
     const popupContainer = document.getElementById("popup-login")
+    const signup = document.getElementById("sign-up")
+    const signin = document.getElementById("sign-in")
+    const googleuser = document.getElementById("googleUser")
+    const demouser = document.getElementById("demoUser")
     let isBlackMode
     let backgroundColorBlack  = "rgb(48, 48, 48)"
     let backgroundColorContainerBlack = "#424242"
@@ -69,6 +73,15 @@ export default function turnNightThemeOrWhiteTheme(){
         submitNameProject.style.backgroundColor = selectAndAddProjectBottonBlack
         popupContainer.style.backgroundColor = backgroundColorBlack
         popupContainer.style.color = colorLettersBlackTheme
+        signin.style.color = colorLettersBlackTheme
+        signin.style.border = "1px solid white"
+        signup.style.color = colorLettersBlackTheme
+        signup.style.border = "1px solid white"
+        googleuser.style.border = "1px solid white"
+        googleuser.style.background = "none"
+        demouser.style.background = "none"
+        demouser.style.border = "1px solid white"
+        demouser.style.color = colorLettersBlackTheme
     }else if(NIGHT_MODE_SWITCH.checked == false){
         html.style.backgroundColor = backgroundColorWhite
         body.style.backgroundColor = backgroundColorWhite;
@@ -107,5 +120,15 @@ export default function turnNightThemeOrWhiteTheme(){
         submitNameProject.style.backgroundColor = "rgb(174,214,241)"
         popupContainer.style.backgroundColor = "white"
         popupContainer.style.color = "black"
+         signin.style.color = "black"
+        signin.style.border = "1px solid black"
+        signup.style.color = "black"
+        signup.style.border = "1px solid black"
+        googleuser.style.border = "1px solid black"
+        googleuser.style.background = "none"
+        demouser.style.background = "none"
+        demouser.style.color = "black"
+        demouser.style.border = "1px solid black"
+
     }
 }
