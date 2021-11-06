@@ -2,7 +2,7 @@ import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfig
 import languajeSwitch from "./languajeSwitch"
 import turnNightThemeOrWhiteTheme from "./themeSwitch"
 import { initializeApp } from 'firebase/app';
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from 'firebase/auth'
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup} from 'firebase/auth'
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -167,3 +167,21 @@ function logOutUser(){
       alert(error.code)
    })
 }
+const provider = new GoogleAuthProvider();
+googleUser.onclick = () => {
+signInWithPopup(auth,provider)
+.then((result) => {
+   const credential = GoogleAuthProvider.credentialFromResult(result)
+   const token = credential.accessToken
+   const user = result.user
+}).catch((error) => {
+   const errorCode = error.code;
+   const errorMessage = error.message;
+   // The email of the user's account used.
+   const email = error.email;
+   // The AuthCredential type that was used.
+   const credential = GoogleAuthProvider.credentialFromError(error);
+   alert("A error happen: " + errorCode)
+})
+}
+alert("asd")
