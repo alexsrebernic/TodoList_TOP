@@ -21,7 +21,12 @@ if(LANGUAJE_SWITCH_BUTTON.checked){
     addprojectspan.textContent = "Añadir proyecto"
     calendarspan.textContent = "Calendario"
     settingsspan.textContent = "Configuraciones"
+    if(loginspan.textContent === "Log out"){
+        loginspan.textContent = "Cerrar sesión"
+    } else if (loginspan.textContent === "Log in"){
     loginspan.textContent = "Iniciar sesion"
+
+    }
     todotext.textContent = "Para hacer"
     inprogresstext.textContent = "En progreso"
     completetext.textContent = "Completado"
@@ -38,7 +43,12 @@ if(LANGUAJE_SWITCH_BUTTON.checked){
     addprojectspan.textContent = "Add project"
     calendarspan.textContent = "Calendar"
     settingsspan.textContent = "Configuration"
+    if(loginspan.textContent === "Cerrar sesión"){
+        loginspan.textContent = "Log out"
+    } else if (loginspan.textContent === "Iniciar sesion"){
     loginspan.textContent = "Log in"
+
+    }
     todotext.textContent = "To do"
     inprogresstext.textContent = "In progress"
     completetext.textContent = "Completed"

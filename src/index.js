@@ -2,7 +2,7 @@ import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfig
 import languajeSwitch from "./languajeSwitch"
 import turnNightThemeOrWhiteTheme from "./themeSwitch"
 import { initializeApp } from 'firebase/app';
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup} from 'firebase/auth'
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult} from 'firebase/auth'
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -54,9 +54,9 @@ function closePopUp(){
 function displayPopUpOrLogOut () {
 const loginSpan = document.getElementById("loginspan")
 
-     if(loginSpan.textContent == "Log in"){
+     if(loginSpan.textContent == "Log in" || loginSpan.textContent == "Iniciar sesion"){
         displayPopUp()
-     } else if(loginSpan.textContent == "Log out"){
+     } else if(loginSpan.textContent == "Log out" || loginSpan.textContent == "Cerrar sesión"){
       logOutUser()
    }
    
@@ -105,66 +105,42 @@ const firebaseConfig = {
  };
  const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
-
 signUpElement.onclick = (e) => {
    e.preventDefault()
-   nameUserSpan.textContent = 'Hi!, ' + emailElement.value
        createUserWithEmailAndPassword(auth,emailElement.value,passwordElement.value).then((userCredential) => {
           formUser.reset()
           const user = userCredential.user
-          closePopUp()
-         LOG_IN_BUTTON.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-       </svg> ` + '<span id="loginspan">Log out</span>'
-       })
+          endLogInOrLogOut(false,true,user)
+         })
        .catch((error) => {
          const errorCode = error.code;
          const errorMessage = error.message;
          stateForm.textContent =  errorCode
-         if(error){
-         nameUserSpan.textContent = ''
-
-         }
-         setTimeout(() => {
-            stateForm.textContent = ""
-         }, 4000);
+         throwErrorSpan(error)
       })     
 }
 signInElement.onclick = (e) => {
    e.preventDefault()
-   nameUserSpan.textContent = 'Hi!, ' + emailElement.value
    signInWithEmailAndPassword(auth,emailElement.value,passwordElement.value)
    .then((userCredential) => {
       formUser.reset()
       const user = userCredential.user
-      closePopUp()
-      LOG_IN_BUTTON.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-       </svg> ` + '<span id="loginspan">Log out</span>'
-
+      endLogInOrLogOut(false,true,user)
    })
    .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       stateForm.textContent =  errorCode
-      if(error){
-         nameUserSpan.textContent = ''
-
-         }
-      setTimeout(() => {
-         stateForm.textContent = ""
-      }, 4000);
+     throwErrorSpan(error)
    })  
 }
 function logOutUser(){
    signOut(auth)
    .then(()=>{
-      LOG_IN_BUTTON.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>` + '<span id="loginspan">Log in</span>'
+      endLogInOrLogOut(true,false)
       nameUserSpan.textContent = ""
-
    }).catch((error)=>{
-      alert(error.code)
+      alert(error.message)
    })
 }
 const provider = new GoogleAuthProvider();
@@ -174,14 +150,63 @@ signInWithPopup(auth,provider)
    const credential = GoogleAuthProvider.credentialFromResult(result)
    const token = credential.accessToken
    const user = result.user
+   endLogInOrLogOut(false,true,user)
 }).catch((error) => {
    const errorCode = error.code;
    const errorMessage = error.message;
-   // The email of the user's account used.
    const email = error.email;
-   // The AuthCredential type that was used.
    const credential = GoogleAuthProvider.credentialFromError(error);
    alert("A error happen: " + errorCode)
 })
+getRedirectResult(auth)
+  .then((result) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+
+    const user = result.user;
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const email = error.email;
+    const credential = GoogleAuthProvider.credentialFromError(error);
+  });
 }
-alert("asd")
+demoUser.onclick = () =>{
+   closePopUp()
+   nameUserSpan.textContent = "Hello, your tasks and projects will not be saved when you leave the page, if you want them to be saved please login or register"
+}
+
+function endLogInOrLogOut(logout,login,user){
+   closePopUp()
+   if(login === true && logout === false){
+      if(LANGUAJE_SWITCH_BUTTON.checked){
+         LOG_IN_BUTTON.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    </svg> ` + '<span id="loginspan">Cerrar sesión</span>'
+    nameUserSpan.textContent = "Hola!, " + user.email
+      } else if (!(LANGUAJE_SWITCH_BUTTON.checked)){
+         LOG_IN_BUTTON.innerHTML =`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    </svg> ` + '<span id="loginspan">Log out</span>'
+    nameUserSpan.textContent = "Hi!, " + user.email
+
+      }
+   }else if (logout === true && login === false){
+      if(LANGUAJE_SWITCH_BUTTON.checked){
+         LOG_IN_BUTTON.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>` + '<span id="loginspan">Iniciar sesion</span>'
+      } else if (!(LANGUAJE_SWITCH_BUTTON.checked)){
+         LOG_IN_BUTTON.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg>` + '<span id="loginspan">Log in</span>'
+      }
+   } 
+}
+function throwErrorSpan(error){
+   if(error){
+      nameUserSpan.textContent = ''
+
+      }
+   setTimeout(() => {
+      stateForm.textContent = ""
+   }, 4000);
+}
