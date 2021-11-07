@@ -84,6 +84,3 @@ function openConfiguration(){
     }
     
 }
-function displayPopUpHelp(){
-    
-}
