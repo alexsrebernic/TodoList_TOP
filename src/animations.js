@@ -1,4 +1,4 @@
-export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration,displayPopUpHelp}
+export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration}
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
