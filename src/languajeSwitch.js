@@ -34,7 +34,7 @@ if(LANGUAJE_SWITCH_BUTTON.checked){
     dayoption.textContent = "Dia"
     weekoption.textContent = "Semana"
     yearoption.textContent = "Año"
-    selectdefaultweek.textContent = "Esta semana"
+    selectdefaultweek.textContent = "Todas"
     labelinput.textContent = "Nombre del proyecto"
     inputproject.setAttribute("placeholder","Ej: Mi rutina de gimnasio...")
     submitnameproject.setAttribute("value","Hecho")
@@ -56,9 +56,9 @@ if(LANGUAJE_SWITCH_BUTTON.checked){
     dayoption.textContent = "Day"
     weekoption.textContent = "Week"
     yearoption.textContent = "Year"
-    selectdefaultweek.textContent = "This week"
+    selectdefaultweek.textContent = "All"
     labelinput.textContent = "Name of the project"
-    inputproject.setAttribute("placeholder","Ex: My gym rutine...")
+    inputproject.setAttribute("placeholder","Ex: My gym routine...")
     submitnameproject.setAttribute("value","Done")
 }
 }

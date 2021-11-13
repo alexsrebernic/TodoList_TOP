@@ -14,16 +14,16 @@ export default function turnNightThemeOrWhiteTheme(){
     const card = document.querySelectorAll(".card")
     const addTask = document.querySelectorAll(".add_task")
     const quantityTask = document.querySelectorAll(".quantity")
-    const task = document.querySelectorAll(".task")
+    const task = document.querySelectorAll("#task")
     const footer = document.querySelector("footer")
     const svg = document.querySelectorAll("svg")
+    const button = document.querySelectorAll("button")
     const submitNameProject = document.getElementById("submit-name-project")
     const popupContainer = document.getElementById("popup-login")
     const signup = document.getElementById("sign-up")
     const signin = document.getElementById("sign-in")
     const googleuser = document.getElementById("googleUser")
     const demouser = document.getElementById("demoUser")
-    let isBlackMode
     let backgroundColorBlack  = "rgb(48, 48, 48)"
     let backgroundColorContainerBlack = "#424242"
     let backgroundColorHomePageAndCalendarBlack = "#3e3e3e"
@@ -65,6 +65,9 @@ export default function turnNightThemeOrWhiteTheme(){
             task.style.backgroundColor = "rgba(151, 151, 151, 0.4)"
             task.style.border = "none"
             task.style.color = "white"
+        })
+        button.forEach(button => {
+            button.style.backgroundColor = selectAndAddProjectBottonBlack
         })
         footer.style.color = colorLettersBlackTheme
         svg.forEach(svgs =>{

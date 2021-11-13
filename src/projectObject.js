@@ -58,5 +58,11 @@ function Task(name,details,date){
     const getDateTask = () => {
         return this.date
     }
-    return {getNameTask,getDetailsTask,getDateTask}
+    const setHtml = (html) => {
+        this.html = html
+    }
+    const getHtml = () => {
+        return this.html
+    }
+    return {getNameTask,getDetailsTask,getDateTask,getHtml,setHtml}
 }

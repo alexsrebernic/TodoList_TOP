@@ -281,6 +281,7 @@ input:checked + .slider:before {
 .content #homePage {
   display: block;
   height: 100%;
+  width: 100%;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
   -webkit-transition: 0.3s ease;
@@ -417,9 +418,13 @@ input:checked + .slider:before {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.content .dashboard .work .task {
+.content .dashboard .work #task {
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
   width: 90%;
   background-color: white;
   border-radius: 15px;
@@ -432,7 +437,7 @@ input:checked + .slider:before {
   -moz-box-shadow: -1px 0px 22px -27px rgba(0, 0, 0, 0.75);
 }
 
-.content .dashboard .work .task .titletask {
+.content .dashboard .work #task .titletask {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -442,24 +447,33 @@ input:checked + .slider:before {
   margin: 10px;
 }
 
-.content .dashboard .work .task .titletask h2 {
+.content .dashboard .work #task .titletask h2 {
   font-weight: 400;
   font-size: 18px;
 }
 
-.content .dashboard .work .task .titletask svg {
+.content .dashboard .work #task .titletask svg {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
 
-.content .dashboard .work .task p {
+.content .dashboard .work #task p {
   margin: 10px;
   width: 90%;
 }
 
-.content .dashboard .work .task #date {
+.content .dashboard .work #task #date {
   margin: 15px;
+  margin-left: 5px;
+}
+
+.content .dashboard .work #task button {
+  width: 50px;
+  height: 30px;
+  font-size: 16px;
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
 
 /*

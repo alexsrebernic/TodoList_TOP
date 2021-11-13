@@ -13,6 +13,7 @@ $fontfamily: 'Roboto', sans-serif;
     #homePage {
         display: block;
         height: 100%;
+        width: 100%;
         border-top-right-radius: 15px;
         border-bottom-right-radius: 15px;
         transition: 0.3s ease;
@@ -101,7 +102,10 @@ $fontfamily: 'Roboto', sans-serif;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            .task {
+            transition: 0.3s ease ;
+
+            #task {
+                transition: 0.3s ease ;
                 width: 90%;
                 background-color: white;
                 border-radius: 15px;
@@ -133,6 +137,14 @@ $fontfamily: 'Roboto', sans-serif;
                 }
                 #date {
                     margin: 15px;
+                    margin-left: 5px;
+                }
+                button {
+                    width: 50px;
+                    height: 30px;
+                    font-size: 16px;
+                    margin-left: 10px;
+                    margin-bottom: 5px;
                 }
             }
         }
