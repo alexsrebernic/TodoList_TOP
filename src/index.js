@@ -1,4 +1,4 @@
-import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration} from "./animations"
+import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration,openOrCloseTask,closeTask} from "./animations"
 import languajeSwitch from "./languajeSwitch"
 import turnNightThemeOrWhiteTheme from "./themeSwitch"
 import { initializeApp } from 'firebase/app';
@@ -27,11 +27,15 @@ const selectProject = document.getElementById("projects")
 const toDoDiv = document.getElementById("to_dos")
 const inProgressDiv = document.getElementById("inprogress")
 const completedDiv = document.getElementById("completed")
+let plusTodo = document.getElementById("plusToDo")
+let plusInProgress = document.getElementById("plusInprogress")
+let plusCompleted = document.getElementById("plusCompleted")
 let arrayOfProjects = []
 let isTaskAlready;
-let todoQuantity;
-let inProgressQuantity;
-let completedQuantity;
+let todoQuantity = 0
+let inProgressQuantity = 0
+let completedQuantity = 0
+let whereIsTheTask;
 HOME_BUTTON.onclick = () => displayHomeButton()
 ADD_PROJECT_BUTTON.onclick = () => addProjectButton()
 CALENDAR_BUTTON.onclick = () => displayCalendarButton()
@@ -139,9 +143,14 @@ function changeDisplayToOptionSelected(){
    checkOption()
 }
 function displayTaskInputs(){
+   
+   if(plusTodo.getAttribute("class") == "rotate")return openOrCloseTask(toDoDiv,plusTodo),isTaskAlready = false
+   if(plusInProgress.getAttribute("class") == "rotate") return openOrCloseTask(inProgressDiv,plusInProgress),isTaskAlready = false
+   if(plusCompleted.getAttribute("class") == "rotate") return openOrCloseTask(completedDiv,plusCompleted) ,isTaskAlready = false
+   if(plusCompleted.getAttribute("class") === undefined || plusCompleted.getAttribute("class") === "return" || event.target.tagName == "path") isTaskAlready = false
    if(isTaskAlready === true) return
-   if(event.srcElement.id == "add_todo"){
-      let todoQuantityElement = document.getElementById("todo_quantity")
+   if(event.srcElement.id == "add_todo" || event.srcElement.id == "plusToDo"){
+      openOrCloseTask(toDoDiv,plusTodo)
       let firstChild = toDoDiv.firstChild
       if(firstChild === null){
          toDoDiv.appendChild(createInputTask())
@@ -149,11 +158,11 @@ function displayTaskInputs(){
          toDoDiv.insertBefore(createInputTask(),toDoDiv.firstChild)
          firstChild.setAttribute("class","down1")
       }
-     
-   
+      whereIsTheTask = "toDoDiv"
+   } else if(event.srcElement.id == "add_inprogress" || event.srcElement.id == "plusInprogress"){
 
-   } else if(event.srcElement.id == "add_inprogress"){
-      let inprogressQuantityElement = document.getElementById("inprogress_quantity")
+      openOrCloseTask(inProgressDiv,plusInProgress)
+
       let firstChild = inProgressDiv.firstChild
       if(firstChild === null){
          inProgressDiv.appendChild(createInputTask())
@@ -161,10 +170,12 @@ function displayTaskInputs(){
          inProgressDiv.insertBefore(createInputTask(),inProgressDiv.firstChild)
          firstChild.setAttribute("class","down1")
       }
-    
+      whereIsTheTask = "inProgressDiv"
 
-   }else if(event.srcElement.id == "add_complete"){
-      let completedQuantityElement = document.getElementById("complete_quantity")
+   }else if(event.srcElement.id == "add_complete" || event.srcElement.id == "plusCompleted"){
+
+      openOrCloseTask(completedDiv,plusCompleted)
+
       let firstChild = completedDiv.firstChild
       if(firstChild === null){
          completedDiv.appendChild(createInputTask())
@@ -172,7 +183,7 @@ function displayTaskInputs(){
          completedDiv.insertBefore(createInputTask(),completedDiv.firstChild)
          firstChild.setAttribute("class","down1")
       }
-   
+      whereIsTheTask = "completedDiv"
 
    }
    if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
@@ -181,34 +192,85 @@ function displayTaskInputs(){
 
 function createInputTask(){
    const div = document.createElement("div")
+   div.innerHTML = '<div class="titletask"><input required id="titleTaskInput" placeholder="Title"></div><p><textarea maxlength = "50" placeholder="Details" id="detailsInput"></textarea></p><input id="subDate" type="date"><button id="doneButtonTask" style="background-color: rgba(0, 0, 0, 0.1);">Done</button>'
    div.setAttribute("id","task")
-   const titleTask = document.createElement("div")
-   const titleTaskInput = document.createElement("input")
-   titleTaskInput.setAttribute("placeholder","Title")
-   titleTask.setAttribute("class","titletask")
-   const details = document.createElement("p")
-   const detailsInput = document.createElement("textarea")
-   detailsInput.setAttribute("placeholder","Details")
-   const subDate = document.createElement("input")
-   const doneButton = document.createElement("button")
-   doneButton.textContent = "Done"
-   subDate.setAttribute("type","date")
-   titleTask.appendChild(titleTaskInput)
-   details.appendChild(detailsInput)
-   div.appendChild(titleTask)
-   div.appendChild(details)
-   div.appendChild(subDate)
-   div.appendChild(doneButton)
    div.setAttribute("class","fromtop")
    return div
 }
+window.onclick = () => {
+   if(event.target.id === "doneButtonTask"){
+      let inputTitle = document.getElementById("titleTaskInput").value
+      let inputDetails = document.getElementById("detailsInput").value
+      let subDate = document.getElementById("subDate").value
+      if(inputTitle.value === "" || inputDetails.value === "" || subDate.value === "") return 
+      let newTask = new Task(inputTitle.value,inputDetails.value,subDate.value)
+      let option = selectProject.options[selectProject.selectedIndex];
+      let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
 
-
-
-
-
-
-
+      if(whereIsTheTask === "toDoDiv"){
+         const elementTodoQuantity = document.getElementById("todo_quantity")
+         todoQuantity++
+         elementTodoQuantity.innerHTML  = String(todoQuantity)
+         arrayOfProjects[indexProject].setTaskInArrayOfToDoTask(newTask)
+         let firstChild = toDoDiv.firstChild
+         toDoDiv.insertBefore(createTaskCard(inputTitle,inputDetails,subDate),toDoDiv.firstChild)
+         firstChild.setAttribute("class","down3")        
+         setTimeout(() => {
+         toDoDiv.removeChild(toDoDiv.childNodes[1])      
+            }, 1000);
+            closeTask(plusTodo)
+            isTaskAlready = false
+      } 
+      else if(whereIsTheTask === "inProgressDiv"){
+         const elementInProgressQuantity = document.getElementById("inprogress_quantity")
+         inProgressQuantity++
+         elementInProgressQuantity.innerHTML = String(inProgressQuantity)
+         arrayOfProjects[indexProject].setTaskInArrayOfInProgressTask(newTask)
+         let firstChild = inProgressDiv.firstChild        
+         inProgressDiv.insertBefore(createTaskCard(inputTitle,inputDetails,subDate),inProgressDiv.firstChild)
+         firstChild.setAttribute("class","down3")
+         setTimeout(() => {
+            inProgressDiv.removeChild(inProgressDiv.childNodes[1])            
+            }, 1000);
+            closeTask(plusInProgress)
+            isTaskAlready = false
+         } else if(whereIsTheTask === "completedDiv"){
+         const elementCompletedQuantity = document.getElementById("complete_quantity")
+         completedQuantity++
+         elementCompletedQuantity.innerHTML = String(completedQuantity)
+         arrayOfProjects[indexProject].setTaskInArrayOfCompletedTask(newTask)
+         let firstChild = completedDiv.firstChild    
+         completedDiv.insertBefore(createTaskCard(inputTitle,inputDetails,subDate),completedDiv.firstChild)
+         firstChild.setAttribute("class","down3")
+         setTimeout(() => {
+            completedDiv.removeChild(completedDiv.childNodes[1])
+         }, 1000);
+         closeTask(plusCompleted)
+         isTaskAlready = false
+      }  
+      if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
+      ADD_TASK_BUTTON.forEach(taskButton => {
+         taskButton.disabled = true
+      })
+      setTimeout(() => {
+         ADD_TASK_BUTTON.forEach(taskButton => {
+            taskButton.disabled = false
+         })
+      }, 2000);
+      newTask.setHtml(createTaskCard(inputTitle,inputDetails,subDate).innerHTML)
+   } else if (event.target.id === "deleteCard"){
+      const deleteButton = document.getElementById("deleteCard")
+      console.log(deleteButton.closest("#task").parentNode)
+      let index = Array.prototype.indexOf.call(deleteButton.closest("#task").parentNode.children,deleteButton.closest("#task"))
+      console.log(index)
+   }
+}
+function createTaskCard(title,details,date){
+   const div = document.createElement("div")
+   div.setAttribute("id","task")
+   div.innerHTML = '<div class="titletask"><h2>' + title +  '</h2><div> <svg id="deleteCard" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg id="pinCard" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg> </div> </div> <p>'+ details +'</p> <sub id="date">' + date + '</sub>'
+   return div
+}
 // FIREBASE
 const emailElement  = document.getElementById("email-input")
 const passwordElement = document.getElementById("password-input")

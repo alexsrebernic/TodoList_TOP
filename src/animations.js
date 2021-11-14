@@ -1,4 +1,4 @@
-export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration}
+export {slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfiguration,openOrCloseTask,closeTask}
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -83,4 +83,23 @@ function openConfiguration(){
         return
     }
     
+}
+function openOrCloseTask(div,svg){
+    if(svg.getAttribute("class") === "rotate"){
+        svg.removeAttribute("class")
+        svg.setAttribute("class","return")
+        div.removeChild(div.childNodes[0])
+        return
+    }
+    if(svg.getAttribute("class") == undefined || svg.getAttribute("class") === "return"){
+        svg.removeAttribute("class")
+        svg.setAttribute("class","rotate")
+    }
+}
+function closeTask(svg){
+    if(svg.getAttribute("class") === "rotate"){
+        svg.removeAttribute("class")
+        svg.setAttribute("class","return")
+        return
+    }
 }

@@ -61,7 +61,12 @@ body{
         width: 80%;
     }
 }
-
+button > * {
+    pointer-events: none;
+  }
+  svg > * {
+    pointer-events: none;
+  }
 
 @keyframes rotate {
     0% {
@@ -195,4 +200,17 @@ body{
 }
 .slideLeft2{
     animation: slideLeft2 0.5s forwards;
+}
+@keyframes down3{
+    0%{
+        transform: translateY(-100px);
+        opacity: 1;
+    }
+    100%{
+        transform: translateY(0px);
+        opacity: 0;
+    }
+}
+.down3 {
+    animation: down3 1s forwards;
 }

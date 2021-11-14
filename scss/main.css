@@ -396,6 +396,7 @@ input:checked + .slider:before {
   font-size: 24px;
   font-weight: 300;
   height: 30px;
+  margin-bottom: 5px;
   background-color: rgba(174, 214, 241, 0.1);
   border-radius: 5px;
   border: none;
@@ -420,6 +421,7 @@ input:checked + .slider:before {
           align-items: center;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
+  overflow: auto;
 }
 
 .content .dashboard .work #task {
@@ -1273,6 +1275,14 @@ body footer svg:hover {
   width: 80%;
 }
 
+button > * {
+  pointer-events: none;
+}
+
+svg > * {
+  pointer-events: none;
+}
+
 @-webkit-keyframes rotate {
   0% {
     -webkit-transform: rotate(0deg);
@@ -1538,5 +1548,36 @@ body footer svg:hover {
 .slideLeft2 {
   -webkit-animation: slideLeft2 0.5s forwards;
           animation: slideLeft2 0.5s forwards;
+}
+
+@-webkit-keyframes down3 {
+  0% {
+    -webkit-transform: translateY(-100px);
+            transform: translateY(-100px);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 0;
+  }
+}
+
+@keyframes down3 {
+  0% {
+    -webkit-transform: translateY(-100px);
+            transform: translateY(-100px);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 0;
+  }
+}
+
+.down3 {
+  -webkit-animation: down3 1s forwards;
+          animation: down3 1s forwards;
 }
 /*# sourceMappingURL=main.css.map */

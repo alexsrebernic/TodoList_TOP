@@ -89,6 +89,7 @@ $fontfamily: 'Roboto', sans-serif;
                 font-size: 24px;
                 font-weight: 300;
                 height: 30px;
+                margin-bottom: 5px;
                 background-color: rgba($color:  #aed6f1 , $alpha: 0.1);
                 border-radius: 5px;
                 border: none;
@@ -103,7 +104,7 @@ $fontfamily: 'Roboto', sans-serif;
             justify-content: flex-start;
             align-items: center;
             transition: 0.3s ease ;
-
+            overflow: auto;
             #task {
                 transition: 0.3s ease ;
                 width: 90%;
