@@ -14,6 +14,9 @@ const LANGUAJE_SWITCH_BUTTON = document.getElementById("checkBox")
 const DONE_PROJECT_BUTTON = document.getElementById("submit-name-project")
 const ADD_TASK_BUTTON = document.querySelectorAll(".add_task")
 
+const elementTodoQuantity = document.getElementById("todo_quantity")
+const elementInProgressQuantity = document.getElementById("inprogress_quantity")
+const elementCompletedQuantity = document.getElementById("complete_quantity")
 const content = document.querySelector(".content") 
 const calendar = document.querySelector("#calendarPage")
 const home = document.querySelector("#homePage")
@@ -258,19 +261,42 @@ window.onclick = () => {
          })
       }, 2000);
       newTask.setHtml(createTaskCard(inputTitle,inputDetails,subDate).innerHTML)
-   } else if (event.target.id === "deleteCard"){
-      const deleteButton = document.getElementById("deleteCard")
-      console.log(deleteButton.closest("#task").parentNode)
-      let index = Array.prototype.indexOf.call(deleteButton.closest("#task").parentNode.children,deleteButton.closest("#task"))
-      console.log(index)
+   } else if (event.target.getAttribute("class") == "deleteButton"){
+      const deleteButton = document.getElementById(event.target.id)
+      deleteTask(deleteButton)
+   }
+
+}
+function deleteTask(task){
+   let parentOfTask = task.closest("#task")
+   let card = task.closest(".card")
+   let index = Array.from(parentOfTask.parentNode.children).indexOf(parentOfTask)
+   parentOfTask.parentNode.removeChild(parentOfTask)
+   let option = selectProject.options[selectProject.selectedIndex];
+   let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
+   if(card.childNodes[1].childNodes[3].getAttribute("id") === "todo_quantity"){
+      todoQuantity--
+      elementTodoQuantity.textContent = String(todoQuantity)
+      arrayOfProjects[indexProject].deleteTaskInArrayOfToDoTask(index)
+   } else if(card.childNodes[1].childNodes[3].getAttribute("id") === "inprogress_quantity"){
+      inProgressQuantity--
+      elementInProgressQuantity.textContent = String(inProgressQuantity)
+      arrayOfProjects[indexProject].deleteTaskInArrayOfInProgressTask(index)
+
+   } else if(card.childNodes[1].childNodes[3].getAttribute("id") === "complete_quantity"){
+      completedQuantity--
+      elementCompletedQuantity.textContent = String(completedQuantity)
+      arrayOfProjects[indexProject].deleteTaskInArrayOfCompletedTask(index)
+      
    }
 }
 function createTaskCard(title,details,date){
    const div = document.createElement("div")
    div.setAttribute("id","task")
-   div.innerHTML = '<div class="titletask"><h2>' + title +  '</h2><div> <svg id="deleteCard" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg id="pinCard" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg> </div> </div> <p>'+ details +'</p> <sub id="date">' + date + '</sub>'
+   div.innerHTML = '<div class="titletask"><h2>' + title +  '</h2><div> <svg class="deleteButton" id="'+ random(0,100000) +'" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg id='+ random(0,100000) +' xmlns="http://www.w3.org/2000/svg" class="pinButton" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg> </div> </div> <p>'+ details +'</p> <sub id="date">' + date + '</sub>'
    return div
 }
+const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 // FIREBASE
 const emailElement  = document.getElementById("email-input")
 const passwordElement = document.getElementById("password-input")
