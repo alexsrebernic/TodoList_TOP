@@ -14,6 +14,7 @@ const LANGUAJE_SWITCH_BUTTON = document.getElementById("checkBox")
 const DONE_PROJECT_BUTTON = document.getElementById("submit-name-project")
 const ADD_TASK_BUTTON = document.querySelectorAll(".add_task")
 
+const workElements = document.querySelectorAll(".work")
 const elementTodoQuantity = document.getElementById("todo_quantity")
 const elementInProgressQuantity = document.getElementById("inprogress_quantity")
 const elementCompletedQuantity = document.getElementById("complete_quantity")
@@ -33,15 +34,17 @@ const completedDiv = document.getElementById("completed")
 let plusTodo = document.getElementById("plusToDo")
 let plusInProgress = document.getElementById("plusInprogress")
 let plusCompleted = document.getElementById("plusCompleted")
+let task = document.querySelectorAll("#task")
+
 let arrayOfProjects = []
 let isTaskAlready;
 let todoQuantity = 0
 let inProgressQuantity = 0
 let completedQuantity = 0
 let whereIsTheTask;
-HOME_BUTTON.onclick = () => displayHomeButton()
-ADD_PROJECT_BUTTON.onclick = () => addProjectButton()
-CALENDAR_BUTTON.onclick = () => displayCalendarButton()
+HOME_BUTTON.onclick = () => slideCalendarToHome()
+ADD_PROJECT_BUTTON.onclick = () => openAddProjectButton()
+CALENDAR_BUTTON.onclick = () =>  slideHomeToCalendar()
 SETTINGS_BUTTON.onclick = () => openConfiguration()
 NIGHT_MODE_SWITCH.onclick = () => turnNightThemeOrWhiteTheme()
 LANGUAJE_SWITCH_BUTTON.onclick = () => languajeSwitch()
@@ -86,16 +89,6 @@ function displayPopUp(){
    backgroundPopUp.style.display = "block"
    popUpLogIn.style.display = "flex"
    popUpLogIn.setAttribute("class","fromtop")
-}
-function displayCalendarButton(){
-   slideHomeToCalendar()
-}
-function displayHomeButton(){
-   slideCalendarToHome()
-}
-
-function addProjectButton(){  
-   openAddProjectButton()
 }
 
 function createProject(e){
@@ -209,47 +202,41 @@ window.onclick = () => {
       let newTask = new Task(inputTitle.value,inputDetails.value,subDate.value)
       let option = selectProject.options[selectProject.selectedIndex];
       let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
-
+      let newCard = createTaskCard(inputTitle,inputDetails,subDate)
       if(whereIsTheTask === "toDoDiv"){
          const elementTodoQuantity = document.getElementById("todo_quantity")
-         todoQuantity++
-         elementTodoQuantity.innerHTML  = String(todoQuantity)
          arrayOfProjects[indexProject].setTaskInArrayOfToDoTask(newTask)
          let firstChild = toDoDiv.firstChild
-         toDoDiv.insertBefore(createTaskCard(inputTitle,inputDetails,subDate),toDoDiv.firstChild)
+         toDoDiv.insertBefore(newCard,toDoDiv.firstChild)
          firstChild.setAttribute("class","down3")        
-         setTimeout(() => {
          toDoDiv.removeChild(toDoDiv.childNodes[1])      
-            }, 1000);
             closeTask(plusTodo)
             isTaskAlready = false
+         elementTodoQuantity.innerHTML  = String(toDoDiv.children.length)
+
       } 
       else if(whereIsTheTask === "inProgressDiv"){
          const elementInProgressQuantity = document.getElementById("inprogress_quantity")
-         inProgressQuantity++
-         elementInProgressQuantity.innerHTML = String(inProgressQuantity)
          arrayOfProjects[indexProject].setTaskInArrayOfInProgressTask(newTask)
          let firstChild = inProgressDiv.firstChild        
-         inProgressDiv.insertBefore(createTaskCard(inputTitle,inputDetails,subDate),inProgressDiv.firstChild)
+         inProgressDiv.insertBefore(newCard,inProgressDiv.firstChild)
          firstChild.setAttribute("class","down3")
-         setTimeout(() => {
             inProgressDiv.removeChild(inProgressDiv.childNodes[1])            
-            }, 1000);
             closeTask(plusInProgress)
             isTaskAlready = false
+            elementInProgressQuantity.innerHTML = String(inProgressDiv.children.length)
+
          } else if(whereIsTheTask === "completedDiv"){
          const elementCompletedQuantity = document.getElementById("complete_quantity")
-         completedQuantity++
-         elementCompletedQuantity.innerHTML = String(completedQuantity)
          arrayOfProjects[indexProject].setTaskInArrayOfCompletedTask(newTask)
          let firstChild = completedDiv.firstChild    
-         completedDiv.insertBefore(createTaskCard(inputTitle,inputDetails,subDate),completedDiv.firstChild)
+         completedDiv.insertBefore(newCard,completedDiv.firstChild)
          firstChild.setAttribute("class","down3")
-         setTimeout(() => {
             completedDiv.removeChild(completedDiv.childNodes[1])
-         }, 1000);
          closeTask(plusCompleted)
          isTaskAlready = false
+         elementCompletedQuantity.innerHTML = String(completedDiv.children.length)
+
       }  
       if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
       ADD_TASK_BUTTON.forEach(taskButton => {
@@ -260,12 +247,83 @@ window.onclick = () => {
             taskButton.disabled = false
          })
       }, 2000);
-      newTask.setHtml(createTaskCard(inputTitle,inputDetails,subDate).innerHTML)
+      newTask.setHtml(newCard)
+      eachTask()
+
    } else if (event.target.getAttribute("class") == "deleteButton"){
       const deleteButton = document.getElementById(event.target.id)
       deleteTask(deleteButton)
    }
+}
+function eachTask(){
+   task = document.querySelectorAll("#task")
+   task.forEach(task => {
+      task.addEventListener("dragstart",() => {
+         task.removeAttribute("class")
+         task.classList.add('dragging')
+         deleteQuantityInContainerDragging(task.parentNode.id)
+      })
+      task.addEventListener("dragend",(e)=>{
+       task.removeAttribute("class")
+         task.classList.remove('dragging')
+         addQuantityInContainerDropping(task.parentNode.id)
+      })
+   })
+}
 
+
+workElements.forEach(container => {
+   container.addEventListener("dragover",(e)=>{
+      const afterELement = getDragAfterElement(container,e.clientY)
+      const draggable = document.querySelector('.dragging')
+      if(afterELement == null){
+      container.appendChild(draggable)
+      } else {
+         container.insertBefore(draggable,afterELement)
+        
+      }
+     
+         
+   })
+})
+function deleteQuantityInContainerDragging(container){
+
+   if(container === "to_dos"){
+         elementTodoQuantity.textContent = String(toDoDiv.children.length - 1)
+   } else if(container === "inprogress"){
+      
+      elementInProgressQuantity.textContent = String(inProgressDiv.children.length - 1)
+   } else if(container=== "completed"){
+
+      elementCompletedQuantity.textContent = String(completedDiv.children.length - 1)
+   }
+
+}
+function addQuantityInContainerDropping(container){
+
+   if(container === "to_dos"){
+
+         elementTodoQuantity.textContent = String(toDoDiv.children.length)
+   } else if(container === "inprogress"){
+      inProgressQuantity += 1
+      elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
+   } else if(container=== "completed"){
+      completedQuantity += 1
+      elementCompletedQuantity.textContent = String(completedDiv.children.length)
+   }
+
+}
+function getDragAfterElement(container,y){
+   const draggableELements = [...container.querySelectorAll('#task:not(.dragging)')]
+   return draggableELements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect()
+      const offset = y - box.top - box.height / 2
+      if(offset < 0 && offset > closest.offset){
+         return {offset:offset, element:child}     
+      } else {
+         return closest
+      }
+   },{offset: Number.NEGATIVE_INFINITY}).element
 }
 function deleteTask(task){
    let parentOfTask = task.closest("#task")
@@ -275,27 +333,24 @@ function deleteTask(task){
    let option = selectProject.options[selectProject.selectedIndex];
    let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
    if(card.childNodes[1].childNodes[3].getAttribute("id") === "todo_quantity"){
-      todoQuantity--
-      elementTodoQuantity.textContent = String(todoQuantity)
+      elementTodoQuantity.textContent = String(toDoDiv.children.length)
       arrayOfProjects[indexProject].deleteTaskInArrayOfToDoTask(index)
    } else if(card.childNodes[1].childNodes[3].getAttribute("id") === "inprogress_quantity"){
-      inProgressQuantity--
-      elementInProgressQuantity.textContent = String(inProgressQuantity)
+      elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
       arrayOfProjects[indexProject].deleteTaskInArrayOfInProgressTask(index)
-
    } else if(card.childNodes[1].childNodes[3].getAttribute("id") === "complete_quantity"){
-      completedQuantity--
-      elementCompletedQuantity.textContent = String(completedQuantity)
+      elementCompletedQuantity.textContent = String(completedDiv.children.length)
       arrayOfProjects[indexProject].deleteTaskInArrayOfCompletedTask(index)
-      
    }
 }
 function createTaskCard(title,details,date){
    const div = document.createElement("div")
    div.setAttribute("id","task")
-   div.innerHTML = '<div class="titletask"><h2>' + title +  '</h2><div> <svg class="deleteButton" id="'+ random(0,100000) +'" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg id='+ random(0,100000) +' xmlns="http://www.w3.org/2000/svg" class="pinButton" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg> </div> </div> <p>'+ details +'</p> <sub id="date">' + date + '</sub>'
+   div.setAttribute("draggable","true")
+   div.innerHTML = '<div class="titletask"><h2>' + title +  '</h2><div> <svg  class="deleteButton" id="'+ random(0,100000) +'" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg draggable ="true" style="cursor:move;" id='+ random(0,100000) +' xmlns="http://www.w3.org/2000/svg" class="pinButton" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg> </div> </div> <p>'+ details +'</p> <sub id="date">' + date + '</sub>'
    return div
 }
+
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 // FIREBASE
 const emailElement  = document.getElementById("email-input")

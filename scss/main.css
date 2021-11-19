@@ -1580,4 +1580,8 @@ svg > * {
   -webkit-animation: down3 1s forwards;
           animation: down3 1s forwards;
 }
+
+.dragging {
+  opacity: 0.5;
+}
 /*# sourceMappingURL=main.css.map */

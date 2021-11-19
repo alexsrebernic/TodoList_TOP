@@ -39,7 +39,7 @@
         <nav>
             <div class="titlenav">
             <h1>.todolist</h1>
-
+              
             </div>
             <ul class="list">
                 <li id="home"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,7 +105,7 @@
             <div id="homePage">
              <div class="header"><span  id="account-name"></span> </div> <div class="title"> <select name="projects" id="projects" > <option value="" hidden selected id="projectdefault">Project</option> </select> <select name="select"> <option value="thisweek" selected id="selectdefaultweek" >All</option> <option value="day" id="dayoption" >Day</option> <option value="week" id="weekoption">Week</option> <option id="yearoption" value="year">Year</option> </select> </div> <div class="dashboard"><div class="card"> <div class="top"> <h2 id="todotext">To do</h2> <h2 class="quantity" id="todo_quantity">0</h2> </div> <button class="add_task" id="add_todo"><svg id="plusToDo" style="width: 15px;" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg></button> <div class="work" id="to_dos"> <div id="task"> <div class="titletask"> <h2>Welcome</h2> <div> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            </svg></button> <div class="work" id="to_dos"> <div draggable="true" id="task"> <div class="titletask"> <h2>Welcome</h2> <div> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
               </svg> </div> </div> <p>To start managing your tasks, you first need to create a project, this is created in the task bar on the left.If you want to switch between To do , In progress and Completed section , just click the pin in the right corner of a task and move it to the section that you want. </p> <sub id="date">27/10/2021</sub></div></div> </div> <div class="card"> <div class="top"> <h2 id="inprogresstext">In progress</h2> <h2 id="inprogress_quantity" class="quantity">0</h2> </div> <button class="add_task" id="add_inprogress"><svg id="plusInprogress" style="width: 15px;" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
