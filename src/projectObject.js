@@ -27,6 +27,15 @@ function Project(name){
     const setTaskInArrayOfCompletedTask = (task) => {
         getArrayOfCompletedTask().push(task)
     }
+    const setTaskInASpeceficIndexArrayOfToDoTask = (task,index) => {
+        getArrayOfToDoTask().splice(index,0,task)
+    }
+    const setTaskInASpeceficIndexArrayOfInProgressTask = (task,index) => {
+        getArrayOfInProgressTask().splice(index,0,task)
+    }
+    const setTaskInASpeceficIndexArrayOfCompletedTask = (task,index) => {
+        getArrayOfCompletedTask().splice(index,0,task)
+    }
     const deleteTaskInArrayOfToDoTask = (index) => {
         getArrayOfToDoTask().splice(index,1)
     }
@@ -42,7 +51,8 @@ function Project(name){
         projectSelect.textContent = getNameProject()
         return projectSelect
     }
-    return {getNameProject,getArrayOfToDoTask,getArrayOfInProgressTask,getArrayOfCompletedTask,setTaskInArrayOfToDoTask,setTaskInArrayOfInProgressTask,setTaskInArrayOfCompletedTask,createSelectProject,deleteTaskInArrayOfToDoTask,deleteTaskInArrayOfInProgressTask,deleteTaskInArrayOfCompletedTask}
+    return {getNameProject,getArrayOfToDoTask,getArrayOfInProgressTask,getArrayOfCompletedTask,setTaskInArrayOfToDoTask,setTaskInArrayOfInProgressTask,setTaskInArrayOfCompletedTask,createSelectProject,deleteTaskInArrayOfToDoTask,deleteTaskInArrayOfInProgressTask,deleteTaskInArrayOfCompletedTask,
+        setTaskInASpeceficIndexArrayOfToDoTask,setTaskInASpeceficIndexArrayOfInProgressTask,setTaskInASpeceficIndexArrayOfCompletedTask}
 }
 
 function Task(name,details,date){

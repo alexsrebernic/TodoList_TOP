@@ -137,6 +137,9 @@ function changeDisplayToOptionSelected(){
    inProgressDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfInProgressTask().join()
    completedDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfCompletedTask().join()
    checkOption()
+   elementTodoQuantity.textContent = String(toDoDiv.children.length)
+   elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
+   elementCompletedQuantity.textContent= String(completedDiv.children.length)
 }
 function displayTaskInputs(){
    
@@ -262,16 +265,18 @@ function eachTask(){
          task.removeAttribute("class")
          task.classList.add('dragging')
          deleteQuantityInContainerDragging(task.parentNode.id)
+         findIndexAndDeleteOrAdd(task,true)
       })
       task.addEventListener("dragend",(e)=>{
        task.removeAttribute("class")
          task.classList.remove('dragging')
          addQuantityInContainerDropping(task.parentNode.id)
+         findIndexAndDeleteOrAdd(task,false)
+
       })
    })
 }
-
-
+eachTask()
 workElements.forEach(container => {
    container.addEventListener("dragover",(e)=>{
       const afterELement = getDragAfterElement(container,e.clientY)
@@ -286,6 +291,32 @@ workElements.forEach(container => {
          
    })
 })
+function findIndexAndDeleteOrAdd(task,remove){
+   let parentOfTask = task.closest("#task")
+   let card = task.closest(".card")
+   let index = Array.from(parentOfTask.parentNode.children).indexOf(parentOfTask)
+   let option = selectProject.options[selectProject.selectedIndex];
+   let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
+   if(remove == true){
+      if(card.getAttribute("id") == "to_dos"){
+         arrayOfProjects[indexProject].deleteTaskInArrayOfToDoTask(index)
+       } else if(card.getAttribute("id") == "inprogress") {
+          arrayOfProjects[indexProject].deleteTaskInArrayOfInProgressTask(index)
+       } else if(card.getAttribute("id") == "completed"){
+          arrayOfProjects[indexProject].deleteTaskInArrayOfCompletedTask(index)
+       }
+   } else if(remove == false){
+      if(card.getAttribute("id") == "to_dos"){
+         arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfToDoTask(index,task)
+       } else if(card.getAttribute("id") == "inprogress") {
+          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfInProgressTask(index,task)
+       } else if(card.getAttribute("id") == "completed"){
+          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfCompletedTask(index,task)
+       }
+   }
+
+  
+}
 function deleteQuantityInContainerDragging(container){
 
    if(container === "to_dos"){
