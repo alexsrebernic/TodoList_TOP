@@ -13,7 +13,7 @@ const NIGHT_MODE_SWITCH = document.getElementById("checkBoxTheme")
 const LANGUAJE_SWITCH_BUTTON = document.getElementById("checkBox")
 const DONE_PROJECT_BUTTON = document.getElementById("submit-name-project")
 const ADD_TASK_BUTTON = document.querySelectorAll(".add_task")
-
+const DELETE_PROJECT_BUTTON = document.getElementById("remove-project")
 const workElements = document.querySelectorAll(".work")
 const elementTodoQuantity = document.getElementById("todo_quantity")
 const elementInProgressQuantity = document.getElementById("inprogress_quantity")
@@ -23,6 +23,7 @@ const calendar = document.querySelector("#calendarPage")
 const home = document.querySelector("#homePage")
 const svgPlus = document.getElementById("plus")
 const listLi = document.querySelector(".list")
+const projectDefault = document.getElementById("projectdefault")
 const popUpLogIn  = document.getElementById("popup-login")
 const backgroundPopUp = document.getElementById("background-popup")
 const formUser = document.getElementById("formUser")
@@ -42,6 +43,7 @@ let todoQuantity = 0
 let inProgressQuantity = 0
 let completedQuantity = 0
 let whereIsTheTask;
+
 HOME_BUTTON.onclick = () => slideCalendarToHome()
 ADD_PROJECT_BUTTON.onclick = () => openAddProjectButton()
 CALENDAR_BUTTON.onclick = () =>  slideHomeToCalendar()
@@ -59,7 +61,7 @@ window.onload = turnNightThemeOrWhiteTheme()
 window.onload = checkOption()
 window.onload = () => {
    if(!(localStorage.getItem("firstSession"))){
-      let firstTimeUser = localStorage.setItem("firstSession","1")
+      localStorage.setItem("firstSession","1")
       displayPopUp()
    }
 }
@@ -119,28 +121,66 @@ function createProject(e){
 }
 function checkOption(){
    let option = selectProject.options[selectProject.selectedIndex]
-if(option.text == "Projects"){
+if(option.text == "Projects" || option.text == "Proyectos"){
    ADD_TASK_BUTTON.forEach(button => {
       button.onclick = () => alert("Please , add a project to create a task.")
    })
+   DELETE_PROJECT_BUTTON.onclick =  (e) =>{
+      return e.preventDefault()
+   } 
 } else {
    ADD_TASK_BUTTON.forEach(button => {
       button.onclick = () => displayTaskInputs()
    })
+   DELETE_PROJECT_BUTTON.onclick = () => deleteProject()
 }
 }
+
+   Node.prototype.appendChildren = (arrayOfNodes) => {
+     var length = arrayOfNodes.length;
+     for (var i = 0; i < length; i++) {
+       this.appendChild(arrayOfNodes[i]);
+     }
+   }
 
 function changeDisplayToOptionSelected(){
    let option = selectProject.options[selectProject.selectedIndex];
    let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
-   toDoDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfToDoTask().join()
-   inProgressDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfInProgressTask().join()
-   completedDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfCompletedTask().join()
+   if(option.text !== "Projects"){
+      if(arrayOfProjects[indexProject].getArrayOfToDoTask().length === 0){
+       toDoDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfToDoTask().join()
+      } else {
+         let arrayOfTodoTask = arrayOfProjects[indexProject].getArrayOfToDoTask()
+         for(let elements in arrayOfTodoTask){
+            toDoDiv.appendChild(arrayOfTodoTask[elements].getHtml())
+         }
+         
+         
+      }
+      if(arrayOfProjects[indexProject].getArrayOfInProgressTask().length === 0){
+       inProgressDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfInProgressTask().join()      
+      } else {
+         let arrayOfInProgressTask = arrayOfProjects[indexProject].getArrayOfInProgressTask()
+         for(let elements in arrayOfInProgressTask){
+            toDoDiv.appendChild(arrayOfInProgressTask[elements].getHtml()) 
+         }
+      }
+      if(arrayOfProjects[indexProject].getArrayOfCompletedTask().length === 0){
+          completedDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfCompletedTask().join()
+      } else {
+         let arrayOfCompletedTask = arrayOfProjects[indexProject].getArrayOfCompletedTask()
+         for(let elements in arrayOfCompletedTask){
+            toDoDiv.appendChild(arrayOfCompletedTask[elements].getHtml()) 
+         }
+      }
    checkOption()
    elementTodoQuantity.textContent = String(toDoDiv.children.length)
    elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
    elementCompletedQuantity.textContent= String(completedDiv.children.length)
+   }
+   
 }
+
 function displayTaskInputs(){
    
    if(plusTodo.getAttribute("class") == "rotate")return openOrCloseTask(toDoDiv,plusTodo),isTaskAlready = false
@@ -196,6 +236,7 @@ function createInputTask(){
    div.setAttribute("class","fromtop")
    return div
 }
+
 window.onclick = () => {
    if(event.target.id === "doneButtonTask"){
       let inputTitle = document.getElementById("titleTaskInput").value
@@ -209,6 +250,7 @@ window.onclick = () => {
       if(whereIsTheTask === "toDoDiv"){
          const elementTodoQuantity = document.getElementById("todo_quantity")
          arrayOfProjects[indexProject].setTaskInArrayOfToDoTask(newTask)
+
          let firstChild = toDoDiv.firstChild
          toDoDiv.insertBefore(newCard,toDoDiv.firstChild)
          firstChild.setAttribute("class","down3")        
@@ -252,7 +294,6 @@ window.onclick = () => {
       }, 2000);
       newTask.setHtml(newCard)
       eachTask()
-
    } else if (event.target.getAttribute("class") == "deleteButton"){
       const deleteButton = document.getElementById(event.target.id)
       deleteTask(deleteButton)
@@ -293,24 +334,26 @@ workElements.forEach(container => {
 })
 function findIndexAndDeleteOrAdd(task,remove){
    let parentOfTask = task.closest("#task")
+   let workdiv = task.closest(".work")
    let card = task.closest(".card")
    let index = Array.from(parentOfTask.parentNode.children).indexOf(parentOfTask)
    let option = selectProject.options[selectProject.selectedIndex];
    let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
+   if(option.text == "Projects" || option.text == "Proyectos") return
    if(remove == true){
-      if(card.getAttribute("id") == "to_dos"){
+      if(workdiv.getAttribute("id") == "to_dos"){
          arrayOfProjects[indexProject].deleteTaskInArrayOfToDoTask(index)
-       } else if(card.getAttribute("id") == "inprogress") {
+       } else if(workdiv.getAttribute("id") == "inprogress") {
           arrayOfProjects[indexProject].deleteTaskInArrayOfInProgressTask(index)
-       } else if(card.getAttribute("id") == "completed"){
+       } else if(workdiv.getAttribute("id") == "completed"){
           arrayOfProjects[indexProject].deleteTaskInArrayOfCompletedTask(index)
        }
    } else if(remove == false){
-      if(card.getAttribute("id") == "to_dos"){
+      if(workdiv.getAttribute("id") == "to_dos"){
          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfToDoTask(index,task)
-       } else if(card.getAttribute("id") == "inprogress") {
+       } else if(workdiv.getAttribute("id") == "inprogress") {
           arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfInProgressTask(index,task)
-       } else if(card.getAttribute("id") == "completed"){
+       } else if(workdiv.getAttribute("id") == "completed"){
           arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfCompletedTask(index,task)
        }
    }
@@ -381,8 +424,28 @@ function createTaskCard(title,details,date){
    div.innerHTML = '<div class="titletask"><h2>' + title +  '</h2><div> <svg  class="deleteButton" id="'+ random(0,100000) +'" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /> </svg> <svg draggable ="true" style="cursor:move;" id='+ random(0,100000) +' xmlns="http://www.w3.org/2000/svg" class="pinButton" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg> </div> </div> <p>'+ details +'</p> <sub id="date">' + date + '</sub>'
    return div
 }
-
+function deleteProject(){
+   let option = selectProject.options[selectProject.selectedIndex];
+   let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
+   arrayOfProjects.splice(indexProject,1)
+   selectProject.removeChild(option)
+   if(arrayOfProjects.length === 0){
+      selectProject.appendChild(projectDefault)
+      toDoDiv.innerHTML = '<div draggable="true" id="task" style="background-color: white; color: black;"> <div class="titletask"> <h2>Welcome</h2> <div> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: black;"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: black;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> </div> </div> <p>To start managing your tasks, you first need to create a project, this is created in the task bar on the left.If you want to switch between To do , In progress and Completed section , just click the pin in the right corner of a task and move it to the section that you want. </p> <sub id="date">27/10/2021</sub></div>'
+      inProgressDiv.innerHTML = ''
+      completedDiv.innerHTML = ''
+      elementTodoQuantity.textContent = String(toDoDiv.children.length)
+   elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
+   elementCompletedQuantity.textContent= String(completedDiv.children.length)
+      eachTask()
+   } else if(arrayOfProjects.length > 0){
+      selectProject.selectedIndex = "1"
+      changeDisplayToOptionSelected()
+   }
+   if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
+}
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
 // FIREBASE
 const emailElement  = document.getElementById("email-input")
 const passwordElement = document.getElementById("password-input")

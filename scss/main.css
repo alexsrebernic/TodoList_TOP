@@ -478,6 +478,26 @@ input:checked + .slider:before {
   margin-bottom: 5px;
 }
 
+.content #remove-project {
+  background-color: none;
+  background: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 10px;
+  padding: 5px;
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  color: rgba(255, 0, 0, 0.5);
+  margin-right: 20px;
+  cursor: pointer;
+}
+
 /*
  * jsCalendar v1.4.4
  * 
