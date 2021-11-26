@@ -2,7 +2,7 @@ import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfig
 import languajeSwitch from "./languajeSwitch"
 import turnNightThemeOrWhiteTheme from "./themeSwitch"
 import { initializeApp } from 'firebase/app';
-import {getAuth,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult,sendSignInLinkToEmail} from 'firebase/auth'
+import {getAuth,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult,sendSignInLinkToEmail,isSignInWithEmailLink,signInWithEmailLink} from 'firebase/auth'
 import { getDatabase } from "firebase/database";
 import {Project,Task} from './projectObject'
 
@@ -509,7 +509,7 @@ const firebaseConfig = {
  };
  const actionCodeSettings = {
    
-   url: 'https://to-do-app-780b2.firebaseapp.com',
+   url: 'https://to-do-app-780b2.web.app',
    handleCodeInApp: true,
    
  };
@@ -534,6 +534,30 @@ signUpElement.onclick = (e) => {
          stateForm.textContent = ""
       }, 3000);
    });  
+}
+if (isSignInWithEmailLink(auth, window.location.href)){
+   let email = window.localStorage.getItem('emailForSignIn')
+   if(!email){
+      email = window.prompt('Please provide your email for confirmation');
+
+   }
+   signInWithEmailLink(auth, email, window.location.href)
+    .then((result) => {
+      // Clear email from storage.
+      window.localStorage.removeItem('emailForSignIn');
+      formUser.reset()
+
+      // You can access the new user via result.user
+      // Additional user info profile not available via:
+      // result.additionalUserInfo.profile == null
+      // You can check if the user is new or existing:
+      // result.additionalUserInfo.isNewUser
+    })
+    .catch((error) => {
+      // Some error occurred, you can inspect the code: error.code
+      // Common errors could be invalid email and invalid or expired OTPs.
+    });
+
 }
 signInElement.onclick = (e) => {
    e.preventDefault()
