@@ -509,7 +509,7 @@ const firebaseConfig = {
  };
  const actionCodeSettings = {
    
-   url: 'https://to-do-app-780b2.web.app',
+   url: 'https://alexsrebernic.github.io/TodoList_TOP/',
    handleCodeInApp: true,
    
  };
