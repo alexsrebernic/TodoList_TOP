@@ -364,15 +364,11 @@ function findIndexAndDeleteOrAdd(task,remove){
       let item = items.pop()
          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfToDoTask(item,index)
          for(let item in arrayOfProjects[indexProject].getArrayOfToDoTask()){
-            console.log(item)
             if(arrayOfProjects[indexProject].getArrayOfToDoTask()[item] === undefined){
                arrayOfProjects[indexProject].getArrayOfToDoTask().splice(item,1)
             }
          }
-        console.log(item)
-        console.log(items)
-         console.log(arrayOfProjects[indexProject].getArrayOfToDoTask())
-        console.log(index)
+      
 
        } else if(workdiv.getAttribute("id") == "inprogress") {
          let item = items.pop()
@@ -515,15 +511,7 @@ const firebaseConfig = {
    
    url: 'https://to-do-app-780b2.firebaseapp.com',
    handleCodeInApp: true,
-   iOS: {
-     bundleId: 'com.example.ios'
-   },
-   android: {
-     packageName: 'com.example.android',
-     installApp: true,
-     minimumVersion: '12'
-   },
-   dynamicLinkDomain: 'https://to-do-app-780b2.web.app'
+   
  };
  const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
@@ -533,9 +521,9 @@ signUpElement.onclick = (e) => {
    sendSignInLinkToEmail(auth, emailElement.value, actionCodeSettings)
    .then(() => {
       stateForm.textContent = "A verification email has been sent to your email, please check."
-     window.localStorage.setItem('emailForSignIn', email);
-    
-      
+      stateForm.style.color = "green"
+     window.localStorage.setItem('emailForSignIn', emailElement.value);
+   signUpElement.disabled = true      
    })
    .catch((error) => {
      const errorCode = error.code;
