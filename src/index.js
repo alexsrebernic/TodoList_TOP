@@ -537,13 +537,17 @@ signUpElement.onclick = (e) => {
 }
 if (isSignInWithEmailLink(auth, window.location.href)){
    let email = window.localStorage.getItem('emailForSignIn')
+   console.log("prueba 1")
+
    if(!email){
       email = window.prompt('Please provide your email for confirmation');
+      console.log("prueba 2")
 
    }
    signInWithEmailLink(auth, email, window.location.href)
     .then((result) => {
        let user = result.user
+       console.log("prueba 3")
       window.localStorage.removeItem('emailForSignIn');
       formUser.reset()
       closePopUp()
