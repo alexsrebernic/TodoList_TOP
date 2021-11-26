@@ -508,16 +508,16 @@ const firebaseConfig = {
   measurementId: "G-WEEDGLSV32"
  };
  const actionCodeSettings = {
-   
    url: 'https://alexsrebernic.github.io/TodoList_TOP/',
    handleCodeInApp: true,
-   
  };
  const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
 
 signUpElement.onclick = (e) => {
    e.preventDefault()
+   console.log(actionCodeSettings.url)
+
    sendSignInLinkToEmail(auth, emailElement.value, actionCodeSettings)
    .then(() => {
       stateForm.textContent = "A verification email has been sent to your email, please check."
@@ -543,19 +543,18 @@ if (isSignInWithEmailLink(auth, window.location.href)){
    }
    signInWithEmailLink(auth, email, window.location.href)
     .then((result) => {
-      // Clear email from storage.
+       let user = result.user
       window.localStorage.removeItem('emailForSignIn');
       formUser.reset()
+      closePopUp()
+      nameUserSpan.textContent = user.displayName
+      endLogInOrLogOut(false,true,user,false)
 
-      // You can access the new user via result.user
-      // Additional user info profile not available via:
-      // result.additionalUserInfo.profile == null
-      // You can check if the user is new or existing:
-      // result.additionalUserInfo.isNewUser
     })
     .catch((error) => {
       // Some error occurred, you can inspect the code: error.code
       // Common errors could be invalid email and invalid or expired OTPs.
+      console.log(error.code)
     });
 
 }
