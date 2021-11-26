@@ -2,8 +2,10 @@ import { slideHomeToCalendar,slideCalendarToHome,openAddProjectButton,openConfig
 import languajeSwitch from "./languajeSwitch"
 import turnNightThemeOrWhiteTheme from "./themeSwitch"
 import { initializeApp } from 'firebase/app';
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult} from 'firebase/auth'
+import {getAuth,signInWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult,sendSignInLinkToEmail} from 'firebase/auth'
+import { getDatabase } from "firebase/database";
 import {Project,Task} from './projectObject'
+
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -43,6 +45,7 @@ let todoQuantity = 0
 let inProgressQuantity = 0
 let completedQuantity = 0
 let whereIsTheTask;
+let items = []
 
 HOME_BUTTON.onclick = () => slideCalendarToHome()
 ADD_PROJECT_BUTTON.onclick = () => openAddProjectButton()
@@ -136,41 +139,39 @@ if(option.text == "Projects" || option.text == "Proyectos"){
 }
 }
 
-   Node.prototype.appendChildren = (arrayOfNodes) => {
-     var length = arrayOfNodes.length;
-     for (var i = 0; i < length; i++) {
-       this.appendChild(arrayOfNodes[i]);
-     }
-   }
+
+   
 
 function changeDisplayToOptionSelected(){
    let option = selectProject.options[selectProject.selectedIndex];
    let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
    if(option.text !== "Projects"){
       if(arrayOfProjects[indexProject].getArrayOfToDoTask().length === 0){
-       toDoDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfToDoTask().join()
+       toDoDiv.innerHTML = ''
       } else {
+         toDoDiv.innerHTML = ''
          let arrayOfTodoTask = arrayOfProjects[indexProject].getArrayOfToDoTask()
          for(let elements in arrayOfTodoTask){
             toDoDiv.appendChild(arrayOfTodoTask[elements].getHtml())
          }
-         
-         
       }
       if(arrayOfProjects[indexProject].getArrayOfInProgressTask().length === 0){
-       inProgressDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfInProgressTask().join()      
+       inProgressDiv.innerHTML = '' 
       } else {
+         inProgressDiv.innerHTML = ''
          let arrayOfInProgressTask = arrayOfProjects[indexProject].getArrayOfInProgressTask()
          for(let elements in arrayOfInProgressTask){
-            toDoDiv.appendChild(arrayOfInProgressTask[elements].getHtml()) 
+            inProgressDiv.appendChild(arrayOfInProgressTask[elements].getHtml()) 
          }
       }
       if(arrayOfProjects[indexProject].getArrayOfCompletedTask().length === 0){
-          completedDiv.innerHTML = arrayOfProjects[indexProject].getArrayOfCompletedTask().join()
+          completedDiv.innerHTML = ''
       } else {
+         completedDiv.innerHTML = ''
+
          let arrayOfCompletedTask = arrayOfProjects[indexProject].getArrayOfCompletedTask()
          for(let elements in arrayOfCompletedTask){
-            toDoDiv.appendChild(arrayOfCompletedTask[elements].getHtml()) 
+            completedDiv.appendChild(arrayOfCompletedTask[elements].getHtml()) 
          }
       }
    checkOption()
@@ -250,7 +251,6 @@ window.onclick = () => {
       if(whereIsTheTask === "toDoDiv"){
          const elementTodoQuantity = document.getElementById("todo_quantity")
          arrayOfProjects[indexProject].setTaskInArrayOfToDoTask(newTask)
-
          let firstChild = toDoDiv.firstChild
          toDoDiv.insertBefore(newCard,toDoDiv.firstChild)
          firstChild.setAttribute("class","down3")        
@@ -299,7 +299,8 @@ window.onclick = () => {
       deleteTask(deleteButton)
    }
 }
-function eachTask(){
+
+function eachTask(e){
    task = document.querySelectorAll("#task")
    task.forEach(task => {
       task.addEventListener("dragstart",() => {
@@ -308,7 +309,7 @@ function eachTask(){
          deleteQuantityInContainerDragging(task.parentNode.id)
          findIndexAndDeleteOrAdd(task,true)
       })
-      task.addEventListener("dragend",(e)=>{
+      task.addEventListener("dragend",()=>{
        task.removeAttribute("class")
          task.classList.remove('dragging')
          addQuantityInContainerDropping(task.parentNode.id)
@@ -316,6 +317,7 @@ function eachTask(){
 
       })
    })
+   
 }
 eachTask()
 workElements.forEach(container => {
@@ -333,28 +335,62 @@ workElements.forEach(container => {
    })
 })
 function findIndexAndDeleteOrAdd(task,remove){
+
    let parentOfTask = task.closest("#task")
    let workdiv = task.closest(".work")
-   let card = task.closest(".card")
    let index = Array.from(parentOfTask.parentNode.children).indexOf(parentOfTask)
    let option = selectProject.options[selectProject.selectedIndex];
    let indexProject = arrayOfProjects.findIndex(object => object.getNameProject() == option.text)
    if(option.text == "Projects" || option.text == "Proyectos") return
    if(remove == true){
       if(workdiv.getAttribute("id") == "to_dos"){
-         arrayOfProjects[indexProject].deleteTaskInArrayOfToDoTask(index)
+      let element = arrayOfProjects[indexProject].deleteTaskInArrayOfToDoTask(index)
+       items.push(element)
+
        } else if(workdiv.getAttribute("id") == "inprogress") {
-          arrayOfProjects[indexProject].deleteTaskInArrayOfInProgressTask(index)
+      let  element = arrayOfProjects[indexProject].deleteTaskInArrayOfInProgressTask(index)
+
+       items.push(element)
        } else if(workdiv.getAttribute("id") == "completed"){
-          arrayOfProjects[indexProject].deleteTaskInArrayOfCompletedTask(index)
+       let element = arrayOfProjects[indexProject].deleteTaskInArrayOfCompletedTask(index)
+
+       items.push(element)
+
        }
    } else if(remove == false){
+    
       if(workdiv.getAttribute("id") == "to_dos"){
-         arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfToDoTask(index,task)
+        
+      let item = items.pop()
+         arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfToDoTask(item,index)
+         for(let item in arrayOfProjects[indexProject].getArrayOfToDoTask()){
+            console.log(item)
+            if(arrayOfProjects[indexProject].getArrayOfToDoTask()[item] === undefined){
+               arrayOfProjects[indexProject].getArrayOfToDoTask().splice(item,1)
+            }
+         }
+        console.log(item)
+        console.log(items)
+         console.log(arrayOfProjects[indexProject].getArrayOfToDoTask())
+        console.log(index)
+
        } else if(workdiv.getAttribute("id") == "inprogress") {
-          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfInProgressTask(index,task)
+         let item = items.pop()
+          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfInProgressTask(item,index)
+          for(let item in arrayOfProjects[indexProject].getArrayOfInProgressTask()){
+            if(arrayOfProjects[indexProject].getArrayOfInProgressTask()[item] === undefined){
+               arrayOfProjects[indexProject].getArrayOfInProgressTask().splice(item,1)
+            }
+         }
        } else if(workdiv.getAttribute("id") == "completed"){
-          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfCompletedTask(index,task)
+        
+          let item = items.pop()
+          arrayOfProjects[indexProject].setTaskInASpeceficIndexArrayOfCompletedTask(item,index)
+          for(let item in arrayOfProjects[indexProject].getArrayOfCompletedTask()){
+            if(arrayOfProjects[indexProject].getArrayOfCompletedTask()[item] === undefined){
+               arrayOfProjects[indexProject].getArrayOfCompletedTask().splice(item,1)
+            }
+         }
        }
    }
 
@@ -447,6 +483,7 @@ function deleteProject(){
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
 // FIREBASE
+//AUTH
 const emailElement  = document.getElementById("email-input")
 const passwordElement = document.getElementById("password-input")
 const signUpElement = document.getElementById("sign-up")
@@ -454,39 +491,61 @@ const signInElement = document.getElementById("sign-in")
 const googleUser = document.getElementById("googleUser")
 const demoUser = document.getElementById("demoUser")
 const stateForm = document.getElementById("state")
+stateForm.style.textAlign = "center"
 
 const firebaseConfig = {
 
    apiKey: "AIzaSyB_9bN8wsncvuVCIEnzYIFhg-mwWFu9T_s",
- 
-   authDomain: "to-do-app-780b2.firebaseapp.com",
- 
-   projectId: "to-do-app-780b2",
- 
-   storageBucket: "to-do-app-780b2.appspot.com",
- 
-   messagingSenderId: "411421814027",
- 
-   appId: "1:411421814027:web:de143fb0d153c8fa8dc60e",
- 
-   measurementId: "G-WEEDGLSV32"
- 
+
+  authDomain: "to-do-app-780b2.firebaseapp.com",
+
+  databaseURL: "https://to-do-app-780b2-default-rtdb.firebaseio.com",
+
+  projectId: "to-do-app-780b2",
+
+  storageBucket: "to-do-app-780b2.appspot.com",
+
+  messagingSenderId: "411421814027",
+
+  appId: "1:411421814027:web:de143fb0d153c8fa8dc60e",
+
+  measurementId: "G-WEEDGLSV32"
+ };
+ const actionCodeSettings = {
+   
+   url: 'https://to-do-app-780b2.firebaseapp.com',
+   handleCodeInApp: true,
+   iOS: {
+     bundleId: 'com.example.ios'
+   },
+   android: {
+     packageName: 'com.example.android',
+     installApp: true,
+     minimumVersion: '12'
+   },
+   dynamicLinkDomain: 'https://to-do-app-780b2.web.app'
  };
  const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
+
 signUpElement.onclick = (e) => {
    e.preventDefault()
-       createUserWithEmailAndPassword(auth,emailElement.value,passwordElement.value).then((userCredential) => {
-          formUser.reset()
-          const user = userCredential.user
-          endLogInOrLogOut(false,true,user,false)
-         })
-       .catch((error) => {
-         const errorCode = error.code;
-         const errorMessage = error.message;
-         stateForm.textContent =  errorCode
-         throwErrorSpan(error)
-      })     
+   sendSignInLinkToEmail(auth, emailElement.value, actionCodeSettings)
+   .then(() => {
+      stateForm.textContent = "A verification email has been sent to your email, please check."
+     window.localStorage.setItem('emailForSignIn', email);
+    
+      
+   })
+   .catch((error) => {
+     const errorCode = error.code;
+     console.log(errorCode)
+     const errorMessage = error.message;
+      stateForm.textContent = errorMessage
+      setTimeout(() => {
+         stateForm.textContent = ""
+      }, 3000);
+   });  
 }
 signInElement.onclick = (e) => {
    e.preventDefault()
@@ -590,3 +649,6 @@ function throwErrorSpan(error){
       stateForm.textContent = ""
    }, 4000);
 }
+//DATABASE FIRESTORE
+
+const database = getDatabase(app);

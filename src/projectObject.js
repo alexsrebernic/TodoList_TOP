@@ -19,13 +19,13 @@ function Project(name){
         return this.completedTask
     }
     const setTaskInArrayOfToDoTask = (task) => {
-        getArrayOfToDoTask().push(task)
+        getArrayOfToDoTask().unshift(task)
     }
     const setTaskInArrayOfInProgressTask = (task) => {
-        getArrayOfInProgressTask().push(task)
+        getArrayOfInProgressTask().unshift(task)
     }
     const setTaskInArrayOfCompletedTask = (task) => {
-        getArrayOfCompletedTask().push(task)
+        getArrayOfCompletedTask().unshift(task)
     }
     const setTaskInASpeceficIndexArrayOfToDoTask = (task,index) => {
         getArrayOfToDoTask().splice(index,0,task)
@@ -37,13 +37,13 @@ function Project(name){
         getArrayOfCompletedTask().splice(index,0,task)
     }
     const deleteTaskInArrayOfToDoTask = (index) => {
-        getArrayOfToDoTask().splice(index,1)
+       return getArrayOfToDoTask().splice(index,1).pop()
     }
     const deleteTaskInArrayOfInProgressTask = (index) => {
-        getArrayOfInProgressTask().splice(index,1)
+       return getArrayOfInProgressTask().splice(index,1).pop()
     }
     const deleteTaskInArrayOfCompletedTask = (index) => {
-        getArrayOfCompletedTask().splice(index,1)
+       return getArrayOfCompletedTask().splice(index,1).pop()
     }
     
     const createSelectProject = () => {
