@@ -76,8 +76,7 @@ export default function turnNightThemeOrWhiteTheme(){
         submitNameProject.style.backgroundColor = selectAndAddProjectBottonBlack
         popupContainer.style.backgroundColor = backgroundColorBlack
         popupContainer.style.color = colorLettersBlackTheme
-        signin.style.color = colorLettersBlackTheme
-        signin.style.border = "1px solid white"
+ 
         signup.style.color = colorLettersBlackTheme
         signup.style.border = "1px solid white"
         googleuser.style.border = "1px solid white"
@@ -123,8 +122,6 @@ export default function turnNightThemeOrWhiteTheme(){
         submitNameProject.style.backgroundColor = "rgb(174,214,241)"
         popupContainer.style.backgroundColor = "white"
         popupContainer.style.color = "black"
-         signin.style.color = "black"
-        signin.style.border = "1px solid black"
         signup.style.color = "black"
         signup.style.border = "1px solid black"
         googleuser.style.border = "1px solid black"

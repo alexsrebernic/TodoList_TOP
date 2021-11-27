@@ -508,7 +508,7 @@ const firebaseConfig = {
   measurementId: "G-WEEDGLSV32"
  };
  const actionCodeSettings = {
-   url: 'https://alexsrebernic.github.io/TodoList_TOP/',
+   url: 'http://127.0.0.1:5500/dist/index.html',
    handleCodeInApp: true,
  };
  const app = initializeApp(firebaseConfig);
@@ -553,30 +553,15 @@ if (isSignInWithEmailLink(auth, window.location.href)){
       formUser.reset()
       closePopUp()
       nameUserSpan.textContent = user.displayName
+      console.log(result)
       endLogInOrLogOut(false,true,user,false)
-
+   
     })
     .catch((error) => {
-      // Some error occurred, you can inspect the code: error.code
-      // Common errors could be invalid email and invalid or expired OTPs.
+    
       console.log(error.code)
     });
 
-}
-signInElement.onclick = (e) => {
-   e.preventDefault()
-   signInWithEmailAndPassword(auth,emailElement.value,passwordElement.value)
-   .then((userCredential) => {
-      formUser.reset()
-      const user = userCredential.user
-      endLogInOrLogOut(false,true,user,false)
-   })
-   .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      stateForm.textContent =  errorCode
-     throwErrorSpan(error)
-   })  
 }
 function logOutUser(){
    signOut(auth)
