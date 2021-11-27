@@ -535,6 +535,7 @@ signUpElement.onclick = (e) => {
       }, 3000);
    });  
 }
+console.log(isSignInWithEmailLink(auth, window.location.href) == true)
 if (isSignInWithEmailLink(auth, window.location.href)){
    let email = window.localStorage.getItem('emailForSignIn')
    console.log("prueba 1")
