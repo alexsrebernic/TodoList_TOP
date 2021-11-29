@@ -1,78 +1,80 @@
 export {Project,Task} 
 
-function Project(name){
+class Project{
+    constructor(name,toDoTask = [],inProgressTask = [],completedTask = []){
     this.name = name
-    this.toDoTask = []
-    this.inProgressTask = []
-    this.completedTask = []
-
-    const getNameProject = () => {
-        return this.name
+    this.toDoTask = toDoTask
+    this.inProgressTask = inProgressTask
+    this.completedTask = completedTask
     }
-    const getArrayOfToDoTask = () => {
-        return this.toDoTask
+    static getNameProject = (project) => {
+        return project.name
     }
-    const getArrayOfInProgressTask = () => {
-        return this.inProgressTask
+    static getArrayOfToDoTask = (project) => {
+        return project.toDoTask
     }
-    const getArrayOfCompletedTask= () => {
-        return this.completedTask
+    static getArrayOfInProgressTask = (project) => {
+        return project.inProgressTask
     }
-    const setTaskInArrayOfToDoTask = (task) => {
-        getArrayOfToDoTask().unshift(task)
+    static getArrayOfCompletedTask= (project) => {
+        return project.completedTask
     }
-    const setTaskInArrayOfInProgressTask = (task) => {
-        getArrayOfInProgressTask().unshift(task)
+    static setTaskInArrayOfToDoTask = (task,project) => {
+        project.toDoTask.unshift(task)
     }
-    const setTaskInArrayOfCompletedTask = (task) => {
-        getArrayOfCompletedTask().unshift(task)
+    static setTaskInArrayOfInProgressTask = (task,project) => {
+        project.inProgressTask.unshift(task)
     }
-    const setTaskInASpeceficIndexArrayOfToDoTask = (task,index) => {
-        getArrayOfToDoTask().splice(index,0,task)
+    static setTaskInArrayOfCompletedTask = (task,project) => {
+        project.completedTask.unshift(task)
     }
-    const setTaskInASpeceficIndexArrayOfInProgressTask = (task,index) => {
-        getArrayOfInProgressTask().splice(index,0,task)
+    static setTaskInASpeceficIndexArrayOfToDoTask = (task,index,project) => {
+        project.toDoTask.splice(index,0,task)
     }
-    const setTaskInASpeceficIndexArrayOfCompletedTask = (task,index) => {
-        getArrayOfCompletedTask().splice(index,0,task)
+    static setTaskInASpeceficIndexArrayOfInProgressTask = (task,index,project) => {
+        project.inProgressTask.splice(index,0,task)
     }
-    const deleteTaskInArrayOfToDoTask = (index) => {
-       return getArrayOfToDoTask().splice(index,1).pop()
+    static setTaskInASpeceficIndexArrayOfCompletedTask = (task,index,project) => {
+        project.completedTask.splice(index,0,task)
     }
-    const deleteTaskInArrayOfInProgressTask = (index) => {
-       return getArrayOfInProgressTask().splice(index,1).pop()
+    static deleteTaskInArrayOfToDoTask = (index,project) => {
+       return project.toDoTask.splice(index,1).pop()
     }
-    const deleteTaskInArrayOfCompletedTask = (index) => {
-       return getArrayOfCompletedTask().splice(index,1).pop()
+    static deleteTaskInArrayOfInProgressTask = (index,project) => {
+       return project.inProgressTask.splice(index,1).pop()
+    }
+    static deleteTaskInArrayOfCompletedTask = (index,project) => {
+       return project.completedTask.splice(index,1).pop()
     }
     
-    const createSelectProject = () => {
+    static createSelectProject = (project) => {
         const projectSelect = document.createElement("option")
-        projectSelect.textContent = getNameProject()
+        projectSelect.textContent = project.name
         return projectSelect
     }
-    return {getNameProject,getArrayOfToDoTask,getArrayOfInProgressTask,getArrayOfCompletedTask,setTaskInArrayOfToDoTask,setTaskInArrayOfInProgressTask,setTaskInArrayOfCompletedTask,createSelectProject,deleteTaskInArrayOfToDoTask,deleteTaskInArrayOfInProgressTask,deleteTaskInArrayOfCompletedTask,
-        setTaskInASpeceficIndexArrayOfToDoTask,setTaskInASpeceficIndexArrayOfInProgressTask,setTaskInASpeceficIndexArrayOfCompletedTask}
-}
+    
+    }
 
-function Task(name,details,date){
+class Task{
+    constructor(name,details,date){
     this.name = name
     this.details = details
     this.date = date
-    const getNameTask = () => {
-        return this.name
     }
-    const getDetailsTask = () => {
-        return this.details
+    
+    static getNameTask = (task) => {
+        return task.name
     }
-    const getDateTask = () => {
-        return this.date
+    static getDetailsTask = (task) => {
+        return task.details
     }
-    const setHtml = (html) => {
-        this.html = html
+    static getDateTask = (task) => {
+        return task.date
     }
-    const getHtml = () => {
-        return this.html
+    static setHtml = (html,task) => {
+        task.html = html
     }
-    return {getNameTask,getDetailsTask,getDateTask,getHtml,setHtml}
+    static getHtml = (task) => {
+        return task.html
+    }
 }
