@@ -3,8 +3,8 @@ import languajeSwitch from "./languajeSwitch"
 import turnNightThemeOrWhiteTheme from "./themeSwitch"
 import { initializeApp } from 'firebase/app';
 import {getAuth,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult,sendSignInLinkToEmail,isSignInWithEmailLink,signInWithEmailLink, EmailAuthProvider} from 'firebase/auth'
-import { getDatabase ,ref, set, child, get} from "firebase/database";
-import {Project,Task} from './projectObject'
+import { getDatabase ,ref, set, child, get,update} from "firebase/database";
+import {arrayOfProjects, Project,Task} from './projectObject'
 import stringifyObject from 'stringify-object';
 
 const HOME_BUTTON = document.getElementById("home")
@@ -39,8 +39,7 @@ let plusTodo = document.getElementById("plusToDo")
 let plusInProgress = document.getElementById("plusInprogress")
 let plusCompleted = document.getElementById("plusCompleted")
 let task = document.querySelectorAll("#task")
-
-let arrayOfProjects = []
+let projectsArray = new arrayOfProjects([],null)
 let isTaskAlready;
 let todoQuantity = 0
 let inProgressQuantity = 0
@@ -97,20 +96,19 @@ function displayPopUp(){
    popUpLogIn.style.display = "flex"
    popUpLogIn.setAttribute("class","fromtop")
 }
-
 function createProject(e){
+   updateArrayOfProjectsInDataBase(userUID,projectsArray)
    const inputProject = document.getElementById("input-project")
    if(inputProject.value == "") return e.preventDefault()
-   let index = arrayOfProjects.findIndex(object=> Project.getNameProject(object) == inputProject.value)
+   checkIfHasProject(userUID)
+   let index = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object=> Project.getNameProject(object) == inputProject.value)
    if(index > -1){
       return alert("Project already exists, please use another name."),e.preventDefault()
    }
    e.preventDefault()
-   let newProject = new Project(inputProject.value)
-   console.log(newProject)
-   arrayOfProjects.push(newProject)
+   let newProject = new Project(inputProject.value,[],[],[])
+   arrayOfProjects.setProject(newProject,projectsArray)
    let optionProject = Project.createSelectProject(newProject)
-   console.log(optionProject)
    selectProject.appendChild(optionProject)
    inputProject.value = null
    if(NIGHT_MODE_SWITCH.checked){
@@ -124,8 +122,8 @@ function createProject(e){
       selectProject.style.backgroundColor = "rgba(174, 214, 241, 0.1)"
       }, 500);
    }
-  setDataInUser(userUID)
-   console.log(arrayOfProjects)
+   updateArrayOfProjectsInDataBase(userUID,projectsArray)
+
 }
 function checkOption(){
    let option = selectProject.options[selectProject.selectedIndex]
@@ -149,32 +147,35 @@ if(option.text == "Projects" || option.text == "Proyectos"){
 
 function changeDisplayToOptionSelected(){
    let option = selectProject.options[selectProject.selectedIndex];
-   let indexProject = arrayOfProjects.findIndex(object => Project.getNameProject(object) == option.text)
+   console.log(projectsArray)
+   let indexProject = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object => Project.getNameProject(object) == option.text)
    if(option.text !== "Projects"){
-      if(Project.getArrayOfToDoTask(arrayOfProjects[indexProject].length == 0)){
+      if(Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray).length == 0)){
        toDoDiv.innerHTML = ''
       } else {
          toDoDiv.innerHTML = ''
-         let arrayOfTodoTask = Project.getArrayOfToDoTask(arrayOfProjects[indexProject])
+         let arrayOfTodoTask = Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))
+         
          for(let elements in arrayOfTodoTask){
+            console.log(arrayOfTodoTask[elements])
             toDoDiv.appendChild(Task.getHtml(arrayOfTodoTask[elements]))
          }
       }
-      if(Project.getArrayOfInProgressTask(arrayOfProjects[indexProject]).length == 0){
+      if(Project.getArrayOfInProgressTask(arrayOfProjects.getPositionProject(indexProject,projectsArray)).length == 0){
        inProgressDiv.innerHTML = '' 
       } else {
          inProgressDiv.innerHTML = ''
-         let arrayOfInProgressTask = Project.getArrayOfInProgressTask(arrayOfProjects[indexProject])
+         let arrayOfInProgressTask = Project.getArrayOfInProgressTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))
          for(let elements in arrayOfInProgressTask){
             inProgressDiv.appendChild(Task.getHtml(arrayOfInProgressTask[elements])) 
          }
       }
-      if(Project.getArrayOfCompletedTask(arrayOfProjects[indexProject]).length === 0){
+      if(Project.getArrayOfCompletedTask(arrayOfProjects.getPositionProject(indexProject,projectsArray)).length === 0){
           completedDiv.innerHTML = ''
       } else {
          completedDiv.innerHTML = ''
 
-         let arrayOfCompletedTask = Project.getArrayOfCompletedTask(arrayOfProjects[indexProject])
+         let arrayOfCompletedTask = Project.getArrayOfCompletedTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))
          for(let elements in arrayOfCompletedTask){
             completedDiv.appendChild(Task.getHtml(arrayOfCompletedTask[elements])) 
          }
@@ -184,7 +185,7 @@ function changeDisplayToOptionSelected(){
    elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
    elementCompletedQuantity.textContent= String(completedDiv.children.length)
    }
-   
+   moveTask()
 }
 
 function displayTaskInputs(){
@@ -246,17 +247,16 @@ function createInputTask(){
 window.onclick = () => {
    if(event.target.id === "doneButtonTask"){
       let inputTitle = document.getElementById("titleTaskInput").value
-      console.log(inputTitle)
       let inputDetails = document.getElementById("detailsInput").value
       let subDate = document.getElementById("subDate").value
       if(inputTitle.value === "" || inputDetails.value === "" || subDate.value === "") return 
       let newTask = new Task(inputTitle,inputDetails,subDate)
       let option = selectProject.options[selectProject.selectedIndex];
-      let indexProject = arrayOfProjects.findIndex(object => Project.getNameProject(object) == option.text)
+      let indexProject = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object => Project.getNameProject(object) == option.text)
       let newCard = createTaskCard(inputTitle,inputDetails,subDate)
       if(whereIsTheTask === "toDoDiv"){
          const elementTodoQuantity = document.getElementById("todo_quantity")
-         Project.setTaskInArrayOfToDoTask(newTask,arrayOfProjects[indexProject])
+         Project.setTaskInArrayOfToDoTask(newTask,arrayOfProjects.getPositionProject(indexProject,projectsArray))
          let firstChild = toDoDiv.firstChild
          toDoDiv.insertBefore(newCard,toDoDiv.firstChild)
          firstChild.setAttribute("class","down3")        
@@ -264,11 +264,11 @@ window.onclick = () => {
             closeTask(plusTodo)
             isTaskAlready = false
          elementTodoQuantity.innerHTML  = String(toDoDiv.children.length)
-
+         console.log(projectsArray)
       } 
       else if(whereIsTheTask === "inProgressDiv"){
          const elementInProgressQuantity = document.getElementById("inprogress_quantity")
-         Project.setTaskInArrayOfInProgressTask(newTask,arrayOfProjects[indexProject])
+         Project.setTaskInArrayOfInProgressTask(newTask,arrayOfProjects.getPositionProject(indexProject,projectsArray))
          let firstChild = inProgressDiv.firstChild        
          inProgressDiv.insertBefore(newCard,inProgressDiv.firstChild)
          firstChild.setAttribute("class","down3")
@@ -279,7 +279,7 @@ window.onclick = () => {
 
          } else if(whereIsTheTask === "completedDiv"){
          const elementCompletedQuantity = document.getElementById("complete_quantity")
-         Project.setTaskInArrayOfCompletedTask(newTask,arrayOfProjects[indexProject])
+         Project.setTaskInArrayOfCompletedTask(newTask,arrayOfProjects.getPositionProject(indexProject,projectsArray))
          let firstChild = completedDiv.firstChild    
          completedDiv.insertBefore(newCard,completedDiv.firstChild)
          firstChild.setAttribute("class","down3")
@@ -300,19 +300,19 @@ window.onclick = () => {
       }, 2000);
       Task.setHtml(newCard,newTask)
       moveTask()
-      setDataInUser(userUID)
-      console.log(newTask)
+      updateArrayOfProjectsInDataBase(userUID,projectsArray)
 
    } else if (event.target.getAttribute("class") == "deleteButton"){
       const deleteButton = document.getElementById(event.target.id)
       deleteTask(deleteButton)
-      setDataInUser(userUID)
+     updateArrayOfProjectsInDataBase(userUID,projectsArray)
 
    }
 }
 
 function moveTask(e){
    task = document.querySelectorAll("#task")
+   console.log(task)
    task.forEach(task => {
       task.addEventListener("dragstart",() => {
          task.removeAttribute("class")
@@ -328,8 +328,6 @@ function moveTask(e){
 
       })
    })
-   setDataInUser(userUID)
-   
 }
 moveTask()
 workElements.forEach(container => {
@@ -352,19 +350,19 @@ function findIndexAndDeleteOrAdd(task,remove){
    let workdiv = task.closest(".work")
    let index = Array.from(parentOfTask.parentNode.children).indexOf(parentOfTask)
    let option = selectProject.options[selectProject.selectedIndex];
-   let indexProject = arrayOfProjects.findIndex(object => Project.getNameProject(object) == option.text)
+   let indexProject = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object => Project.getNameProject(object) == option.text)
    if(option.text == "Projects" || option.text == "Proyectos") return
    if(remove == true){
       if(workdiv.getAttribute("id") == "to_dos"){
-      let element = Project.deleteTaskInArrayOfToDoTask(index,arrayOfProjects[indexProject])
+      let element = Project.deleteTaskInArrayOfToDoTask(index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
        items.push(element)
 
        } else if(workdiv.getAttribute("id") == "inprogress") {
-      let  element = Project.deleteTaskInArrayOfInProgressTask(index,arrayOfProjects[indexProject])
+      let  element = Project.deleteTaskInArrayOfInProgressTask(index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
 
        items.push(element)
        } else if(workdiv.getAttribute("id") == "completed"){
-       let element = Project.deleteTaskInArrayOfCompletedTask(index,arrayOfProjects[indexProject])
+       let element = Project.deleteTaskInArrayOfCompletedTask(index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
 
        items.push(element)
 
@@ -374,29 +372,29 @@ function findIndexAndDeleteOrAdd(task,remove){
       if(workdiv.getAttribute("id") == "to_dos"){
         
       let item = items.pop()
-         Project.setTaskInASpeceficIndexArrayOfToDoTask(item,index,arrayOfProjects[indexProject])
-         for(let item in Project.getArrayOfToDoTask(arrayOfProjects[indexProject])){
-            if(Project.getArrayOfToDoTask(arrayOfProjects[indexProject])[item] === undefined){
-               Project.getArrayOfToDoTask(arrayOfProjects[indexProject]).splice(item,1)
+         Project.setTaskInASpeceficIndexArrayOfToDoTask(item,index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
+         for(let item in Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))){
+            if(Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))[item] === undefined){
+               Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray)).splice(item,1)
             }
          }
       
 
        } else if(workdiv.getAttribute("id") == "inprogress") {
          let item = items.pop()
-          Project.setTaskInASpeceficIndexArrayOfInProgressTask(item,index,arrayOfProjects[indexProject])
-          for(let item in Project.getArrayOfInProgressTask(arrayOfProjects[indexProject])){
-            if(Project.getArrayOfInProgressTask(arrayOfProjects[indexProject])[item] === undefined){
-               Project.getArrayOfInProgressTask(arrayOfProjects[indexProject]).splice(item,1)
+          Project.setTaskInASpeceficIndexArrayOfInProgressTask(item,index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
+          for(let item in Project.getArrayOfInProgressTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))){
+            if(Project.getArrayOfInProgressTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))[item] === undefined){
+               Project.getArrayOfInProgressTask(arrayOfProjects.getPositionProject(indexProject,projectsArray)).splice(item,1)
             }
          }
        } else if(workdiv.getAttribute("id") == "completed"){
         
           let item = items.pop()
-          Project.setTaskInASpeceficIndexArrayOfCompletedTask(item,index,arrayOfProjects[indexProject])
-          for(let item in Project.getArrayOfCompletedTask(arrayOfProjects[indexProject])){
-            if(Project.getArrayOfCompletedTask(arrayOfProjects[indexProject])[item] === undefined){
-               Project.getArrayOfCompletedTask(arrayOfProjects[indexProject]).splice(item,1)
+          Project.setTaskInASpeceficIndexArrayOfCompletedTask(item,index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
+          for(let item in Project.getArrayOfCompletedTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))){
+            if(Project.getArrayOfCompletedTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))[item] === undefined){
+               Project.getArrayOfCompletedTask(arrayOfProjects.getPositionProject(indexProject,projectsArray)).splice(item,1)
             }
          }
        }
@@ -449,16 +447,16 @@ function deleteTask(task){
    let index = Array.from(parentOfTask.parentNode.children).indexOf(parentOfTask)
    parentOfTask.parentNode.removeChild(parentOfTask)
    let option = selectProject.options[selectProject.selectedIndex];
-   let indexProject = arrayOfProjects.findIndex(object => Project.getNameProject(object) == option.text)
+   let indexProject = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object => Project.getNameProject(object) == option.text)
    if(card.childNodes[1].childNodes[3].getAttribute("id") === "todo_quantity"){
       elementTodoQuantity.textContent = String(toDoDiv.children.length)
-      Project.deleteTaskInArrayOfToDoTask(index,arrayOfProjects[indexProject])
+      Project.deleteTaskInArrayOfToDoTask(index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
    } else if(card.childNodes[1].childNodes[3].getAttribute("id") === "inprogress_quantity"){
       elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
-      Project.deleteTaskInArrayOfInProgressTask(index,arrayOfProjects[indexProject])
+      Project.deleteTaskInArrayOfInProgressTask(index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
    } else if(card.childNodes[1].childNodes[3].getAttribute("id") === "complete_quantity"){
       elementCompletedQuantity.textContent = String(completedDiv.children.length)
-      Project.deleteTaskInArrayOfCompletedTask(index,arrayOfProjects[indexProject])
+      Project.deleteTaskInArrayOfCompletedTask(index,arrayOfProjects.getPositionProject(indexProject,projectsArray))
    }
 }
 function createTaskCard(title,details,date){
@@ -470,17 +468,16 @@ function createTaskCard(title,details,date){
 }
 function deleteProject(){
    let option = selectProject.options[selectProject.selectedIndex];
-   let indexProject = arrayOfProjects.findIndex(object => Project.getNameProject(object) == option.text)
-   arrayOfProjects.splice(indexProject,1)
+   let indexProject = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object => Project.getNameProject(object) == option.text)
+   arrayOfProjects.getArrayOfProjects(projectsArray).splice(indexProject,1)
    selectProject.removeChild(option)
-   if(arrayOfProjects.length === 0){
+   if(arrayOfProjects.getArrayOfProjects(projectsArray).length === 0){
      setDefaultPage()
-   } else if(arrayOfProjects.length > 0){
+   } else if(arrayOfProjects.getArrayOfProjects(projectsArray).length > 0){
       selectProject.selectedIndex = "1"
       changeDisplayToOptionSelected()
    }
    if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
-    setDataInUser(userUID)
 }
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 function setDefaultPage(){
@@ -491,15 +488,16 @@ function setDefaultPage(){
    elementTodoQuantity.textContent = String(toDoDiv.children.length)
 elementInProgressQuantity.textContent = String(inProgressDiv.children.length)
 elementCompletedQuantity.textContent= String(completedDiv.children.length)
+selectProject.innerHTML = ""
+selectProject.appendChild(projectDefault)
+projectsArray.array = []
    moveTask()
 }
 
 // FIREBASE
 //AUTH
 const emailElement  = document.getElementById("email-input")
-const passwordElement = document.getElementById("password-input")
 const signUpElement = document.getElementById("sign-up")
-const signInElement = document.getElementById("sign-in")
 const googleUser = document.getElementById("googleUser")
 const demoUser = document.getElementById("demoUser")
 const stateForm = document.getElementById("state")
@@ -553,13 +551,14 @@ signUpElement.onclick = (e) => {
 }
 if (isSignInWithEmailLink(auth, window.location.href)){
    let email = window.localStorage.getItem('emailForSignIn')
-
    if(!email){
       displayPopUp()
 
    }
    signInWithEmailLink(auth, email, window.location.href)
     .then((result) => {
+      setDefaultPage()
+
        let user = result.user
       writeUserData(user.uid,email)
       userUID = user.uid
@@ -568,7 +567,8 @@ if (isSignInWithEmailLink(auth, window.location.href)){
       closePopUp()
       nameUserSpan.textContent = user.displayName
       endLogInOrLogOut(false,true,user,false)
-   
+      getArrayOfArrayOfProjectsFromDB(userUID)
+      
     })
     .catch((error) => {
     
@@ -579,9 +579,8 @@ if (isSignInWithEmailLink(auth, window.location.href)){
 
 function logOutUser(){
    setDefaultPage()
-   selectProject.innerHTML = ""
-   selectProject.appendChild(projectDefault)
-   arrayOfProjects = []
+   userUID = null
+   projectsArray = new arrayOfProjects([],null)
    signOut(auth)
    .then(()=>{
       endLogInOrLogOut(true,false)
@@ -594,13 +593,14 @@ const provider = new GoogleAuthProvider();
 googleUser.onclick = () => {
 signInWithPopup(auth,provider)
 .then((result) => {
+   setDefaultPage()
    const credential = GoogleAuthProvider.credentialFromResult(result)
    const token = credential.accessToken
    const user = result.user
    writeUserData(user.uid,user.email)
    userUID = user.uid
-   getData()
    endLogInOrLogOut(false,true,user,true)
+   getArrayOfArrayOfProjectsFromDB(userUID)
 }).catch((error) => {
    const errorCode = error.code;
    const errorMessage = error.message;
@@ -662,59 +662,63 @@ function endLogInOrLogOut(logout,login,user,googleUser){
       }
    } 
 }
-function throwErrorSpan(error){
-   if(error){
-      nameUserSpan.textContent = ''
 
-      }
-   setTimeout(() => {
-      stateForm.textContent = ""
-   }, 4000);
-}
 
 function writeUserData(userId, email) {
-   const dbRef = ref(getDatabase());
-get(child(dbRef, `users`)).then((snapshot) => {
-  if (snapshot.exists()) {
-     if(userId == Object.keys(snapshot.val()).pop()) return
-  } else {
    if(userId === undefined) return
    set(ref(db, 'users/' + userId), {
      email: email,
    });
   }
-}).catch((error) => {
-  console.error(error);
-});
+
   
- }
- function setDataInUser(userId,nameProject,arrayOfTodoTask,arrayOfInProgressTask,arrayOfCompletedTask){
-    if(userId === undefined) return
-    set(ref(db,'users/' + userId +'/arrayOfProjects'),{
-      name: nameProject,
-      arrayOfTodoTask: arrayOfTodoTask,
-      arrayOfInProgressTask: arrayOfInProgressTask,
-      arrayOfCompletedTask: arrayOfCompletedTask
-   })
- }
- function updateArrayOfTodoTask(){
 
- }
- function updateArrayOfInProgressTask(){
-
- }
- function upadteArrayOfCompletedTask(){
-
- }
-function getData(){
+ function updateArrayOfProjectsInDataBase(userId,arrayOfProjects){
+    console.log(arrayOfProjects)
+    arrayOfProjects.uid  = userId
+   if(userId === undefined) return
+   set(ref(db,userId), {
+    arrayOfProjects:arrayOfProjects  
+  }
+   )
+}
+ function checkIfHasProject(userId){
+    if(userId === undefined)  return
    const dbRef = ref(getDatabase());
-   get(child(dbRef, `users/${userUID}`)).then((snapshot) => {
+   get(child(dbRef, `${userId}`)).then((snapshot) => {
+     if (!(snapshot.exists())) {
+      projectsArray = new arrayOfProjects([],userUID)
+      projectsArray.uid = userUID
+      set(ref(db,`${userId}`),{
+         arrayOfProjects:projectsArray
+      })
+   } 
+   });
+}
+function getArrayOfArrayOfProjectsFromDB(userId){
+   const dbRef = ref(getDatabase());
+   get(child(dbRef, `${userId}`)).then((snapshot) => {
+    
      if (snapshot.exists()) {
-       console.log(snapshot.val().arrayOfProjects.projects);
-     } else {
-       console.log("No data available");
-     }
-   }).catch((error) => {
-     console.error(error);
+     projectsArray = snapshot.val().arrayOfProjects
+      for(let projects in projectsArray.array){
+         let optionProject = Project.createSelectProject(projectsArray.array[projects])
+         selectProject.appendChild(optionProject)
+         if(typeof projectsArray.array[projects] == "object"){
+            if(projectsArray.array[projects].toDoTask == undefined) projectsArray.array[projects].toDoTask = []
+            if(projectsArray.array[projects].inProgressTask == undefined) projectsArray.array[projects].inProgressTask = []
+            if(projectsArray.array[projects].completedTask == undefined) projectsArray.array[projects].completedTask = []
+         } 
+         for(let task in projectsArray.array[projects]){
+            if(typeof projectsArray.array[projects][task] == "object" && projectsArray.array[projects][task].length > 0){
+               let newCard = createTaskCard(projectsArray.array[projects][task][0].name,projectsArray.array[projects][task][0].details,projectsArray.array[projects][task][0].date)
+               Task.setHtml(newCard,projectsArray.array[projects][task][0])
+               console.log(projectsArray.array[projects][task])
+            }
+       
+         }
+         moveTask()
+      }
+   } 
    });
 }

@@ -1,7 +1,26 @@
-export {Project,Task} 
+export {Project,Task,arrayOfProjects} 
+
+class arrayOfProjects {
+    constructor (array,uid){
+        this.array = array
+        this.uid = uid
+    }
+    static setProject(project,arrayOfProjects){
+        arrayOfProjects.array.push(project)
+    }
+    static getArrayOfProjects(arrayOfProjects){
+       return arrayOfProjects.array
+    }
+    static deleteProject(index,arrayOfProjects){
+        arrayOfProjects.array.splice(index,1)
+    }
+    static getPositionProject(index,arrayOfProjects){
+        return arrayOfProjects.array[index]
+    }
+}
 
 class Project{
-    constructor(name,toDoTask = [],inProgressTask = [],completedTask = []){
+    constructor(name,toDoTask,inProgressTask,completedTask){
     this.name = name
     this.toDoTask = toDoTask
     this.inProgressTask = inProgressTask
