@@ -147,7 +147,6 @@ if(option.text == "Projects" || option.text == "Proyectos"){
 
 function changeDisplayToOptionSelected(){
    let option = selectProject.options[selectProject.selectedIndex];
-   console.log(projectsArray)
    let indexProject = arrayOfProjects.getArrayOfProjects(projectsArray).findIndex(object => Project.getNameProject(object) == option.text)
    if(option.text !== "Projects"){
       if(Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray).length == 0)){
@@ -157,7 +156,6 @@ function changeDisplayToOptionSelected(){
          let arrayOfTodoTask = Project.getArrayOfToDoTask(arrayOfProjects.getPositionProject(indexProject,projectsArray))
          
          for(let elements in arrayOfTodoTask){
-            console.log(arrayOfTodoTask[elements])
             toDoDiv.appendChild(Task.getHtml(arrayOfTodoTask[elements]))
          }
       }
@@ -264,7 +262,6 @@ window.onclick = () => {
             closeTask(plusTodo)
             isTaskAlready = false
          elementTodoQuantity.innerHTML  = String(toDoDiv.children.length)
-         console.log(projectsArray)
       } 
       else if(whereIsTheTask === "inProgressDiv"){
          const elementInProgressQuantity = document.getElementById("inprogress_quantity")
@@ -312,22 +309,26 @@ window.onclick = () => {
 
 function moveTask(e){
    task = document.querySelectorAll("#task")
-   console.log(task)
    task.forEach(task => {
       task.addEventListener("dragstart",() => {
          task.removeAttribute("class")
          task.classList.add('dragging')
          deleteQuantityInContainerDragging(task.parentNode.id)
          findIndexAndDeleteOrAdd(task,true)
+   if(userUID != undefined && projectsArray.array != []) updateArrayOfProjectsInDataBase(userUID,projectsArray)
+
       })
       task.addEventListener("dragend",()=>{
        task.removeAttribute("class")
          task.classList.remove('dragging')
          addQuantityInContainerDropping(task.parentNode.id)
          findIndexAndDeleteOrAdd(task,false)
+   if(userUID != undefined && projectsArray.array != []) updateArrayOfProjectsInDataBase(userUID,projectsArray)
 
       })
    })
+   if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
+
 }
 moveTask()
 workElements.forEach(container => {
@@ -478,6 +479,8 @@ function deleteProject(){
       changeDisplayToOptionSelected()
    }
    if(NIGHT_MODE_SWITCH.checked) turnNightThemeOrWhiteTheme()
+   updateArrayOfProjectsInDataBase(userUID,projectsArray)
+
 }
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 function setDefaultPage(){
@@ -537,8 +540,7 @@ if (isSignInWithEmailLink(auth, window.location.href)){
    signInWithEmailLink(auth, email, window.location.href)
     .then((result) => {
       setDefaultPage()
-
-       let user = result.user
+      let user = result.user
       writeUserData(user.uid,email)
       userUID = user.uid
       window.localStorage.removeItem('emailForSignIn');
@@ -547,7 +549,6 @@ if (isSignInWithEmailLink(auth, window.location.href)){
       nameUserSpan.textContent = user.displayName
       endLogInOrLogOut(false,true,user,false)
       getArrayOfArrayOfProjectsFromDB(userUID)
-      
     })
     .catch((error) => {
     
@@ -653,7 +654,6 @@ function writeUserData(userId, email) {
   
 
  function updateArrayOfProjectsInDataBase(userId,arrayOfProjects){
-    console.log(arrayOfProjects)
     arrayOfProjects.uid  = userId
    if(userId === undefined) return
    set(ref(db,userId), {
@@ -692,7 +692,6 @@ function getArrayOfArrayOfProjectsFromDB(userId){
             if(typeof projectsArray.array[projects][task] == "object" && projectsArray.array[projects][task].length > 0){
                let newCard = createTaskCard(projectsArray.array[projects][task][0].name,projectsArray.array[projects][task][0].details,projectsArray.array[projects][task][0].date)
                Task.setHtml(newCard,projectsArray.array[projects][task][0])
-               console.log(projectsArray.array[projects][task])
             }
        
          }
