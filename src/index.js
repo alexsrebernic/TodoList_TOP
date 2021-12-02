@@ -6,7 +6,7 @@ import {getAuth,signOut,GoogleAuthProvider,signInWithPopup,getRedirectResult,sen
 import { getDatabase ,ref, set, child, get,update} from "firebase/database";
 import {arrayOfProjects, Project,Task} from './projectObject'
 import stringifyObject from 'stringify-object';
-
+import {firebaseConfig,actionCodeSettings} from './firebase.config'
 const HOME_BUTTON = document.getElementById("home")
 const ADD_PROJECT_BUTTON = document.getElementById("add_project")
 const CALENDAR_BUTTON = document.getElementById("calendar")
@@ -503,28 +503,7 @@ const demoUser = document.getElementById("demoUser")
 const stateForm = document.getElementById("state")
 stateForm.style.textAlign = "center"
 
-const firebaseConfig = {
 
-   apiKey: "AIzaSyB_9bN8wsncvuVCIEnzYIFhg-mwWFu9T_s",
-
-  authDomain: "to-do-app-780b2.firebaseapp.com",
-
-  databaseURL: "https://to-do-app-780b2-default-rtdb.firebaseio.com",
-
-  projectId: "to-do-app-780b2",
-
-  storageBucket: "to-do-app-780b2.appspot.com",
-
-  messagingSenderId: "411421814027",
-
-  appId: "1:411421814027:web:de143fb0d153c8fa8dc60e",
-
-  measurementId: "G-WEEDGLSV32"
- };
- const actionCodeSettings = {
-   url: 'http://127.0.0.1:5500/dist/index.html',
-   handleCodeInApp: true,
- };
  const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
 const db = getDatabase(app);
